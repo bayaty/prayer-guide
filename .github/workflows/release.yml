@@ -83,35 +83,49 @@ jobs:
         if: steps.check.outputs.exists == 'false'
         run: flutter test
 
-      - name: Build release APK
+      - name: Build release APKs
         if: steps.check.outputs.exists == 'false'
-        run: flutter build apk --release
+        # Universal for anything, plus per-architecture builds. A phone only
+        # needs its own architecture, so the arm64 file is roughly a third of
+        # the universal one and installs far more quickly.
+        run: |
+          flutter build apk --release
+          flutter build apk --release --split-per-abi
 
       - name: Verify the APK signature
         if: steps.check.outputs.exists == 'false'
         run: |
           EXPECTED="acbd534465cfdf47e1e00c0b5b73f2453f3e4857dabe0d8fbe9430e4b5789ba1"
           APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -1)
-          ACTUAL=$("$APKSIGNER" verify --print-certs \
-            build/app/outputs/flutter-apk/app-release.apk \
-            | grep -m1 -i "SHA-256 digest" | awk '{print $NF}')
-          echo "expected: $EXPECTED"
-          echo "actual:   $ACTUAL"
-          if [ "$ACTUAL" != "$EXPECTED" ]; then
-            echo "::error::Signature mismatch. This APK would not install over existing builds."
-            exit 1
-          fi
-          echo "Signature matches."
+          # Every APK we publish must carry the same signature, or an update
+          # cannot install over an existing build.
+          for apk in build/app/outputs/flutter-apk/app-release.apk \
+                     build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
+                     build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk \
+                     build/app/outputs/flutter-apk/app-x86_64-release.apk; do
+            ACTUAL=$("$APKSIGNER" verify --print-certs "$apk" \
+              | grep -m1 -i "SHA-256 digest" | awk '{print $NF}')
+            echo "$(basename "$apk"): $ACTUAL"
+            if [ "$ACTUAL" != "$EXPECTED" ]; then
+              echo "::error::Signature mismatch in $(basename "$apk")."
+              exit 1
+            fi
+          done
+          echo "All signatures match."
 
-      - name: Rename the APK
+      - name: Name the APKs
         if: steps.check.outputs.exists == 'false'
         run: |
-          # Two copies: a versioned one for the archive, and a stable name so
-          # a single permanent URL always points at the newest build.
-          cp build/app/outputs/flutter-apk/app-release.apk \
+          OUT=build/app/outputs/flutter-apk
+          # Versioned copies for the archive, plus stable names so a single
+          # permanent URL always points at the newest build.
+          cp "$OUT/app-release.apk" \
              "prayer-guide-${{ steps.version.outputs.version }}.apk"
-          mv build/app/outputs/flutter-apk/app-release.apk \
-             "prayer-guide.apk"
+          cp "$OUT/app-release.apk" "prayer-guide.apk"
+          # Phones are almost always arm64, so give that one a plain name.
+          cp "$OUT/app-arm64-v8a-release.apk" "prayer-guide-phone.apk"
+          cp "$OUT/app-arm64-v8a-release.apk" "prayer-guide-arm64.apk"
+          cp "$OUT/app-armeabi-v7a-release.apk" "prayer-guide-arm32.apk"
           ls -lh prayer-guide*.apk
 
       - name: Create the GitHub Release
@@ -122,5 +136,8 @@ jobs:
           gh release create "${{ steps.version.outputs.tag }}" \
             "prayer-guide-${{ steps.version.outputs.version }}.apk" \
             "prayer-guide.apk" \
+            "prayer-guide-phone.apk" \
+            "prayer-guide-arm64.apk" \
+            "prayer-guide-arm32.apk" \
             --title "${{ steps.version.outputs.tag }}" \
             --generate-notes

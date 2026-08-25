@@ -145,27 +145,31 @@ final List<WuduStep> wuduSteps = [
     number: 8,
     title: 'Wipe the Head (Masah)',
     instruction:
-        'With wet hands, wipe over the head from the front hairline to the '
-        'back, then bring the hands forward again. This is done once.',
+        'Take fresh water in your hands, then wipe over your head from the '
+        'front hairline to the back, and bring your hands forward again. '
+        'This is done once.',
     icon: '🌙',
     info:
-        'The head is wiped, not washed, and only once. Masah uses the '
-        'wetness already on the hands, which makes wudu practical without '
-        'needing more water.',
+        'The head is wiped, not washed, and only once. Abdullah bin Zaid, '
+        'describing how the Prophet performed wudu, put his hands in the '
+        'water before wiping his head (Sahih al-Bukhari 186), so fresh '
+        'water is taken rather than reusing what is left on the hands from '
+        'washing the arms.',
     times: 1,
   ),
   const WuduStep(
     number: 9,
     title: 'Wipe the Ears',
     instruction:
-        'Using the same wetness, wipe the inside of the ears with the index '
-        'fingers and the outside with the thumbs.',
+        'With the same wetness used for the head, wipe the inside of your '
+        'ears with your index fingers and the outside with your thumbs.',
     icon: '🎀',
     level: StepLevel.sunnah,
     info:
-        'The ears are treated as part of the head, using the same wetness '
-        'rather than fresh water. Index fingers take the inside, thumbs '
-        'the outside.',
+        'The ears are treated as part of the head. Describing the same '
+        'wudu, the narration continues that the Prophet "wiped his head '
+        'and ears inside and outside" (Sunan Abi Dawud 121), the ears '
+        'following on from the head rather than being a separate washing.',
     times: 1,
   ),
   const WuduStep(
