@@ -1,0 +1,126 @@
+name: Release
+
+# Publishes a GitHub Release with an APK whenever the version in
+# pubspec.yaml changes on main. Pushes that don't touch the version
+# are skipped, so ordinary commits don't create duplicate releases.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//' | cut -d'+' -f1)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+
+      - name: Skip if this tag already exists
+        id: check
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Tag ${{ steps.version.outputs.tag }} already exists. Nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Java
+        if: steps.check.outputs.exists == 'false'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        if: steps.check.outputs.exists == 'false'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.9
+          channel: stable
+          cache: true
+
+      # The release build is signed with the debug key (see
+      # android/app/build.gradle.kts). Restoring the same keystore used
+      # locally keeps the signature stable, so in-app updates install
+      # over existing builds instead of failing on a signature mismatch.
+      - name: Restore signing keystore
+        if: steps.check.outputs.exists == 'false'
+        env:
+          KEYSTORE_B64: ${{ secrets.DEBUG_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::error::DEBUG_KEYSTORE_B64 secret is not set. APKs would be signed"
+            echo "::error::with a different key and could not install over existing builds."
+            exit 1
+          fi
+          mkdir -p ~/.android
+          echo "$KEYSTORE_B64" | base64 -d > ~/.android/debug.keystore
+          echo "Keystore restored ($(stat -c%s ~/.android/debug.keystore) bytes)."
+
+      - name: Install dependencies
+        if: steps.check.outputs.exists == 'false'
+        run: flutter pub get
+
+      - name: Analyze
+        if: steps.check.outputs.exists == 'false'
+        run: flutter analyze
+
+      - name: Run tests
+        if: steps.check.outputs.exists == 'false'
+        run: flutter test
+
+      - name: Build release APK
+        if: steps.check.outputs.exists == 'false'
+        run: flutter build apk --release
+
+      - name: Verify the APK signature
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          EXPECTED="acbd534465cfdf47e1e00c0b5b73f2453f3e4857dabe0d8fbe9430e4b5789ba1"
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -1)
+          ACTUAL=$("$APKSIGNER" verify --print-certs \
+            build/app/outputs/flutter-apk/app-release.apk \
+            | grep -m1 -i "SHA-256 digest" | awk '{print $NF}')
+          echo "expected: $EXPECTED"
+          echo "actual:   $ACTUAL"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "::error::Signature mismatch. This APK would not install over existing builds."
+            exit 1
+          fi
+          echo "Signature matches."
+
+      - name: Rename the APK
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          # Two copies: a versioned one for the archive, and a stable name so
+          # a single permanent URL always points at the newest build.
+          cp build/app/outputs/flutter-apk/app-release.apk \
+             "prayer-guide-${{ steps.version.outputs.version }}.apk"
+          mv build/app/outputs/flutter-apk/app-release.apk \
+             "prayer-guide.apk"
+          ls -lh prayer-guide*.apk
+
+      - name: Create the GitHub Release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            "prayer-guide-${{ steps.version.outputs.version }}.apk" \
+            "prayer-guide.apk" \
+            --title "${{ steps.version.outputs.tag }}" \
+            --generate-notes
