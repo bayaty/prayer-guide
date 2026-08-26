@@ -47,8 +47,47 @@ class PrayerScreen extends StatelessWidget {
                 ),
               ),
             ],
+            // Room for the name, the window and the badge once collapsed.
+            toolbarHeight: 64,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
+              titlePadding: const EdgeInsets.symmetric(
+                horizontal: 52,
+                vertical: 12,
+              ),
+              // Shown while scrolled down, so the prayer and its window stay
+              // on screen through the steps.
+              title: AnimatedBuilder(
+                animation: ActivePrayer.instance,
+                builder: (context, _) {
+                  final window = ActivePrayer.windowLabel(prayer.name);
+                  final isNow = ActivePrayer.instance.isNow(prayer.name);
+
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          window == null
+                              ? prayer.name
+                              : '${prayer.name}  $window',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      if (isNow) ...[
+                        const SizedBox(width: 6),
+                        const NowBadge(compact: true),
+                      ],
+                    ],
+                  );
+                },
+              ),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -81,10 +120,25 @@ class PrayerScreen extends StatelessWidget {
                             prayer.name,
                           );
 
+                          final window = ActivePrayer.windowLabel(
+                            prayer.name,
+                          );
+
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (minutes != null)
+                              if (window != null)
+                                Text(
+                                  window,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0.3,
+                                  ),
+                                )
+                              else if (minutes != null)
                                 Text(
                                   AzanTimes.format(minutes),
                                   textAlign: TextAlign.center,

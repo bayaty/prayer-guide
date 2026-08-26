@@ -44,6 +44,7 @@ class WuduScreen extends StatelessWidget {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
               title: const Text(
                 'Wudu',
                 style: TextStyle(

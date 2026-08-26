@@ -97,6 +97,46 @@ class ActivePrayer extends ChangeNotifier {
     return 'Isha';
   }
 
+  /// The stretch of time a prayer may be prayed in, as minutes past
+  /// midnight, or null when the date falls outside the table.
+  ///
+  /// Each prayer runs until the next one is called, with two exceptions:
+  /// Fajr ends at sunrise rather than at Dhuhr, and Isha runs on to the
+  /// following dawn, so its end is read from the next day.
+  static ({int start, int end})? windowFor(String prayer, DateTime date) {
+    final today = AzanTimes.instance.forDate(date);
+    if (today == null) return null;
+
+    switch (prayer.toLowerCase()) {
+      case 'fajr':
+        return (start: today.fajr, end: today.shrooq);
+      case 'dhuhr':
+      case 'zuhr':
+        return (start: today.zuhr, end: today.asr);
+      case 'asr':
+        return (start: today.asr, end: today.maghreb);
+      case 'maghrib':
+      case 'maghreb':
+        return (start: today.maghreb, end: today.isha);
+      case 'isha':
+        // Ends at the next dawn. On the last day of the table there is no
+        // following row, so the end is left unknown rather than guessed.
+        final tomorrow = AzanTimes.instance.forDate(
+          date.add(const Duration(days: 1)),
+        );
+        if (tomorrow == null) return null;
+        return (start: today.isha, end: tomorrow.fajr);
+    }
+    return null;
+  }
+
+  /// The window for a prayer today, formatted as "1:28 pm to 5:13 pm".
+  static String? windowLabel(String prayer, {DateTime? on}) {
+    final w = windowFor(prayer, on ?? DateTime.now());
+    if (w == null) return null;
+    return '${AzanTimes.format(w.start)} - ${AzanTimes.format(w.end)}';
+  }
+
   /// When the current prayer's time runs out, for the countdown line.
   static int? endsAt(DateTime at) {
     final today = AzanTimes.instance.forDate(at);

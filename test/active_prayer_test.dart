@@ -109,6 +109,85 @@ void main() {
     });
   });
 
+  group('the window each prayer may be prayed in', () {
+    test('runs from one call to the next', () {
+      // January 1: Fajr 6:31, sunrise 7:55, Dhuhr 12:30, Asr 14:45,
+      // Maghrib 17:03, Isha 18:28.
+      final date = DateTime(2026, 1, 1);
+
+      expect(ActivePrayer.windowFor('Dhuhr', date),
+          (start: 12 * 60 + 30, end: 14 * 60 + 45));
+      expect(ActivePrayer.windowFor('Asr', date),
+          (start: 14 * 60 + 45, end: 17 * 60 + 3));
+      expect(ActivePrayer.windowFor('Maghrib', date),
+          (start: 17 * 60 + 3, end: 18 * 60 + 28));
+    });
+
+    test('Fajr ends at sunrise rather than at Dhuhr', () {
+      final w = ActivePrayer.windowFor('Fajr', DateTime(2026, 1, 1))!;
+
+      expect(w.start, 6 * 60 + 31);
+      expect(w.end, 7 * 60 + 55, reason: 'sunrise, not Dhuhr at 12:30');
+    });
+
+    test('Isha ends at the next dawn', () {
+      // Isha 18:28 on January 1, running to Fajr 6:31 on January 2.
+      final w = ActivePrayer.windowFor('Isha', DateTime(2026, 1, 1))!;
+
+      expect(w.start, 18 * 60 + 28);
+      expect(w.end, 6 * 60 + 31, reason: 'the following morning');
+      expect(w.end, lessThan(w.start),
+          reason: 'the only window that wraps past midnight');
+    });
+
+    test('Isha on the last day of the table has no known end', () {
+      // There is no row for January 1 2027 to read the dawn from.
+      expect(ActivePrayer.windowFor('Isha', DateTime(2026, 12, 31)), isNull);
+    });
+
+    test('reads as a range for the screen', () {
+      final label = ActivePrayer.windowLabel(
+        'Dhuhr',
+        on: DateTime(2026, 8, 26),
+      );
+      expect(label, '1:28 pm - 5:13 pm');
+
+      expect(
+        ActivePrayer.windowLabel('Asr', on: DateTime(2026, 8, 26)),
+        '5:13 pm - 8:10 pm',
+      );
+    });
+
+    test('one prayer ends exactly where the next begins', () {
+      final date = DateTime(2026, 5, 20);
+
+      final dhuhr = ActivePrayer.windowFor('Dhuhr', date)!;
+      final asr = ActivePrayer.windowFor('Asr', date)!;
+      final maghrib = ActivePrayer.windowFor('Maghrib', date)!;
+
+      expect(dhuhr.end, asr.start, reason: 'no gap between Dhuhr and Asr');
+      expect(asr.end, maghrib.start);
+    });
+
+    test('a date outside the table has no window', () {
+      expect(ActivePrayer.windowFor('Dhuhr', DateTime(2027, 5, 1)), isNull);
+      expect(ActivePrayer.windowLabel('Dhuhr', on: DateTime(2027, 5, 1)),
+          isNull);
+    });
+
+    test('the window agrees with which prayer is marked', () {
+      // Anywhere inside a window, that prayer should be the one in.
+      for (final name in ['Fajr', 'Dhuhr', 'Asr', 'Maghrib']) {
+        final w = ActivePrayer.windowFor(name, DateTime(2026, 7, 10))!;
+        final middle = (w.start + w.end) ~/ 2;
+
+        final at = DateTime(2026, 7, 10, middle ~/ 60, middle % 60);
+        expect(ActivePrayer.evaluate(at), name,
+            reason: '$name should be in at ${middle ~/ 60}:${middle % 60}');
+      }
+    });
+  });
+
   group('when the current time runs out', () {
     test('points at the next call', () {
       expect(ActivePrayer.endsAt(jan1(7, 0)), 7 * 60 + 55); // sunrise
