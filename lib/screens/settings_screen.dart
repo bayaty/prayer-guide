@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/app_settings.dart';
+import 'qibla_screen.dart';
 import '../services/update_service.dart';
 import '../theme/app_colors.dart';
 
@@ -106,6 +107,55 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.all(16),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 2,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const QiblaScreen(),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.explore,
+                              color: AppColors.primary, size: 26),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Qibla Compass',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Find the direction of the Kaaba from '
+                                  'your city.',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey[600],
+                                      height: 1.4),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.chevron_right, color: Colors.grey[400]),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
