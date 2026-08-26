@@ -80,8 +80,16 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('all three headings show by default', (tester) async {
+    /// Opens on a step that actually carries a supplication, since the first
+    /// step is the intention and has no text of its own.
+    Future<void> openStepWithText(WidgetTester tester) async {
       await open(tester);
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('all three headings show by default', (tester) async {
+      await openStepWithText(tester);
 
       expect(find.text('Arabic'), findsOneWidget);
       expect(find.text('Transliteration'), findsOneWidget);
@@ -91,7 +99,7 @@ void main() {
     testWidgets('turning off Arabic removes only that section',
         (tester) async {
       await AppSettings.instance.setShowArabic(false);
-      await open(tester);
+      await openStepWithText(tester);
 
       expect(find.text('Arabic'), findsNothing);
       expect(find.text('Transliteration'), findsOneWidget);
@@ -101,7 +109,7 @@ void main() {
     testWidgets('turning off transliteration removes only that section',
         (tester) async {
       await AppSettings.instance.setShowTransliteration(false);
-      await open(tester);
+      await openStepWithText(tester);
 
       expect(find.text('Arabic'), findsOneWidget);
       expect(find.text('Transliteration'), findsNothing);
@@ -111,7 +119,7 @@ void main() {
     testWidgets('turning off translation removes only that section',
         (tester) async {
       await AppSettings.instance.setShowTranslation(false);
-      await open(tester);
+      await openStepWithText(tester);
 
       expect(find.text('Arabic'), findsOneWidget);
       expect(find.text('Transliteration'), findsOneWidget);
@@ -120,23 +128,53 @@ void main() {
 
     testWidgets('three sections are separated by two dividers',
         (tester) async {
-      await open(tester);
+      await openStepWithText(tester);
       expect(find.byType(Divider), findsNWidgets(2));
     });
 
     testWidgets('two sections leave a single divider', (tester) async {
       await AppSettings.instance.setShowArabic(false);
-      await open(tester);
+      await openStepWithText(tester);
       expect(find.byType(Divider), findsOneWidget);
     });
 
     testWidgets('one section leaves no divider', (tester) async {
       await AppSettings.instance.setShowArabic(false);
       await AppSettings.instance.setShowTransliteration(false);
-      await open(tester);
+      await openStepWithText(tester);
 
       expect(find.byType(Divider), findsNothing,
           reason: 'a lone section should not be followed by a divider');
+      expect(find.text('Translation'), findsOneWidget);
+    });
+
+    testWidgets('a step with no supplication shows no empty text card',
+        (tester) async {
+      await open(tester);
+
+      // The prayer opens on the intention, which carries no Arabic,
+      // transliteration or translation. None of the headings belong there.
+      final intention =
+          prayers.first.steps.firstWhere((s) => s.title.contains('Niyyah'));
+      expect(intention.arabicText.trim(), isEmpty);
+      expect(intention.translation.trim(), isEmpty);
+
+      expect(find.text('Arabic'), findsNothing,
+          reason: 'an empty step should not show an Arabic heading');
+      expect(find.text('Transliteration'), findsNothing);
+      expect(find.text('Translation'), findsNothing,
+          reason: 'an empty step should not show an orphan Translation card');
+    });
+
+    testWidgets('a step that has text still shows its sections',
+        (tester) async {
+      await open(tester);
+
+      // Move to the standing position, which carries the opening Takbir.
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Arabic'), findsOneWidget);
       expect(find.text('Translation'), findsOneWidget);
     });
 
@@ -145,7 +183,7 @@ void main() {
       await AppSettings.instance.setShowArabic(false);
       await AppSettings.instance.setShowTransliteration(false);
       await AppSettings.instance.setShowTranslation(false);
-      await open(tester);
+      await openStepWithText(tester);
 
       expect(find.text('Arabic'), findsNothing);
       expect(find.text('Transliteration'), findsNothing);
@@ -153,7 +191,7 @@ void main() {
       expect(find.byType(Divider), findsNothing);
 
       // The step itself must still be usable.
-      expect(find.textContaining('Decide in your heart'), findsWidgets,
+      expect(find.textContaining('Stand facing'), findsWidgets,
           reason: 'the instruction text must survive');
     });
   });

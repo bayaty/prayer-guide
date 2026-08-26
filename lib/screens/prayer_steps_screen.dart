@@ -120,6 +120,8 @@ class _StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sections = _sections(context, step);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -173,24 +175,22 @@ class _StepCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  // Sections are assembled from whichever the user has
-                  // enabled, so dividers only ever fall between two visible
-                  // blocks.
-                  ..._sections(context, step),
-                ],
+          // Sections are assembled from whichever the user has enabled and
+          // the step actually has, so dividers only fall between two visible
+          // blocks and the card disappears entirely when nothing is left.
+          if (sections.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(children: sections),
               ),
             ),
-          ),
+          ],
           const SizedBox(height: 80),
         ],
       ),
@@ -213,7 +213,7 @@ class _StepCard extends StatelessWidget {
         );
 
     final blocks = <List<Widget>>[
-      if (s.showArabic)
+      if (s.showArabic && step.arabicText.trim().isNotEmpty)
         [
           label('Arabic'),
           const SizedBox(height: 12),
@@ -228,7 +228,7 @@ class _StepCard extends StatelessWidget {
             textDirection: TextDirection.rtl,
           ),
         ],
-      if (s.showTransliteration)
+      if (s.showTransliteration && step.transliteration.trim().isNotEmpty)
         [
           label('Transliteration'),
           const SizedBox(height: 12),
@@ -243,7 +243,7 @@ class _StepCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-      if (s.showTranslation)
+      if (s.showTranslation && step.translation.trim().isNotEmpty)
         [
           label('Translation'),
           const SizedBox(height: 12),
