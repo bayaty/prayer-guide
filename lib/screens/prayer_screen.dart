@@ -46,13 +46,6 @@ class PrayerScreen extends StatelessWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: Text(
-                '${prayer.name} Prayer',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -61,20 +54,29 @@ class PrayerScreen extends StatelessWidget {
                     colors: [AppColors.accent, AppColors.primary],
                   ),
                 ),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    // Sits above the collapsing title so the two never
-                    // overlap or read as a repeated name.
-                    padding: const EdgeInsets.only(bottom: 56),
-                    child: Text(
-                      prayer.timeDescription,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 15,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        prayer.name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 40,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 4),
+                      Text(
+                        prayer.timeDescription,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
