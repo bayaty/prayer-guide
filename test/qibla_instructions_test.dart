@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -47,6 +49,20 @@ void main() {
 
       expect(find.text('Stand facing north.'), findsOneWidget);
       expect(find.textContaining('no compass'), findsOneWidget);
+    });
+
+    test('the moving instruction says body and phone turn together', () {
+      // Reading the source directly, since the test environment has no
+      // compass and never renders the steps that mention turning.
+      final source = File(
+        'lib/screens/qibla_screen.dart',
+      ).readAsStringSync();
+
+      expect(source, contains('you and the phone turn together'));
+      expect(source, contains('Do not '));
+      expect(source, contains('spin the phone by itself'));
+      expect(source, isNot(contains('Turn your whole body slowly')),
+          reason: 'the old wording read as spinning the phone alone');
     });
 
     testWidgets('give the turn from north for the chosen city',

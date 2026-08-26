@@ -180,13 +180,19 @@ class _QiblaScreenState extends State<QiblaScreen> {
             if (working) ...[
               _step(1, 'Pick your city from the list above.'),
               _step(2,
-                  'Hold the phone flat, screen up and level with the '
-                  'ground.'),
+                  'Hold the phone flat in front of you, screen up and level '
+                  'with the ground.'),
               _step(3,
-                  'Turn your whole body slowly until the gold arrow points '
-                  'straight up.'),
-              _step(4, 'Facing that way, you are facing the qibla.'),
+                  'Keeping the phone still in your hands, shuffle round on '
+                  'the spot so that you and the phone turn together. Do not '
+                  'spin the phone by itself.'),
+              _step(4,
+                  'Stop when the Kaaba and the gold arrow point straight up, '
+                  'away from you.'),
               _step(5,
+                  'You are now facing the qibla. Your body faces the same '
+                  'way the arrow does.'),
+              _step(6,
                   'To check it, the N on the dial should sit over true '
                   'north. The notes below give a few ways to find it.'),
             ] else ...[
