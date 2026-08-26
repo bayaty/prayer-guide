@@ -24,6 +24,7 @@ class _QiblaScreenState extends State<QiblaScreen> {
 
   StreamSubscription<CompassEvent>? _compass;
   double? _heading;
+  double? _accuracy;
   bool _hasCompass = true;
 
   @override
@@ -44,6 +45,10 @@ class _QiblaScreenState extends State<QiblaScreen> {
         if (!mounted) return;
         setState(() {
           _heading = event.heading;
+          // How far out the reading may be, in degrees. Android reports a
+          // calibration status rather than a measurement, so this is a
+          // banding: about 15 when well calibrated, 30 or 45 when not.
+          _accuracy = event.accuracy;
           // A null heading means the sensor is present but unreadable,
           // usually because it needs calibrating.
           _hasCompass = event.heading != null;
@@ -141,7 +146,9 @@ class _QiblaScreenState extends State<QiblaScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
+          if (_hasCompass && heading != null) _quality(),
+          const SizedBox(height: 16),
           _readout(bearing, distance, heading),
           const SizedBox(height: 16),
           _instructions(bearing, heading),
@@ -280,7 +287,19 @@ class _QiblaScreenState extends State<QiblaScreen> {
                   ),
                   _note(
                     'If the arrow drifts or sticks, wave the phone in a '
-                    'figure of eight to settle it.',
+                    'figure of eight to settle it. Spinning the phone does '
+                    'no harm, it is how the phone recalibrates.',
+                  ),
+                  _note(
+                    'To test it, turn slowly on the spot through a full '
+                    'circle. A good compass keeps the Kaaba fixed on the '
+                    'same point of the room. If it jumps, lags or settles '
+                    'somewhere new, it is picking up metal nearby.',
+                  ),
+                  _note(
+                    'Walk a few steps away and try again. If the direction '
+                    'shifts between two spots in the same room, trust '
+                    'neither and move somewhere clearer.',
                   ),
                   _note(
                     'The bearing is measured from true north. A magnetic '
@@ -361,6 +380,90 @@ class _QiblaScreenState extends State<QiblaScreen> {
                 color: Colors.grey[700],
                 height: 1.45,
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Says plainly whether the reading can be trusted.
+  ///
+  /// Android does not measure the error. It reports how well the
+  /// magnetometer is calibrated, which the plugin turns into a rough
+  /// deviation: about 15 degrees at best, 30 or 45 when it needs waving
+  /// about. Anything worse than 15 is wide enough to matter for the qibla.
+  Widget _quality() {
+    final accuracy = _accuracy;
+
+    late final Color colour;
+    late final IconData icon;
+    late final String title;
+    late final String detail;
+
+    if (accuracy == null || accuracy < 0) {
+      colour = Colors.grey;
+      icon = Icons.help_outline;
+      title = 'Accuracy unknown';
+      detail = 'This device does not report how well it is calibrated. '
+          'Treat the direction as approximate.';
+    } else if (accuracy <= 15) {
+      colour = const Color(0xFF2E7D32);
+      icon = Icons.check_circle_outline;
+      title = 'Good reading';
+      detail = 'The compass is calibrated. The direction should be within '
+          'about ${accuracy.round()} degrees.';
+    } else if (accuracy <= 30) {
+      colour = const Color(0xFFB26A00);
+      icon = Icons.error_outline;
+      title = 'Rough reading';
+      detail = 'The direction may be out by around ${accuracy.round()} '
+          'degrees. Wave the phone in a figure of eight, away from metal, '
+          'to sharpen it.';
+    } else {
+      colour = const Color(0xFFB3261E);
+      icon = Icons.warning_amber_outlined;
+      title = 'Needs calibrating';
+      detail = 'The direction may be out by ${accuracy.round()} degrees or '
+          'more, which is too wide to rely on. Step away from metal and '
+          'wave the phone in a figure of eight until this changes.';
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: colour.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colour.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: colour, size: 22),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: colour,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  detail,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    color: Colors.grey[800],
+                    height: 1.4,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

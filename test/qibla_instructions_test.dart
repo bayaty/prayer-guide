@@ -75,6 +75,54 @@ void main() {
     });
   });
 
+  group('the accuracy banding', () {
+    /// Mirrors the thresholds the screen uses. Android reports a calibration
+    /// status which the plugin maps to 15, 30 or 45 degrees, or -1 when it
+    /// does not know.
+    String band(double? accuracy) {
+      if (accuracy == null || accuracy < 0) return 'unknown';
+      if (accuracy <= 15) return 'good';
+      if (accuracy <= 30) return 'rough';
+      return 'needs calibrating';
+    }
+
+    test('calls the best Android reading good', () {
+      expect(band(15), 'good');
+    });
+
+    test('warns on the middle reading', () {
+      expect(band(30), 'rough');
+    });
+
+    test('rejects the worst reading', () {
+      expect(band(45), 'needs calibrating');
+    });
+
+    test('admits when the device says nothing', () {
+      expect(band(null), 'unknown');
+      expect(band(-1), 'unknown');
+    });
+
+    test('never calls a wide error good', () {
+      // A reading out by more than fifteen degrees is wide enough to point
+      // at the wrong place, so it must never be presented as reliable.
+      for (var deviation = 16; deviation <= 90; deviation++) {
+        expect(band(deviation.toDouble()), isNot('good'),
+            reason: '$deviation degrees was called a good reading');
+      }
+    });
+
+    test('the screen explains how to check the reading', () {
+      final source = File('lib/screens/qibla_screen.dart').readAsStringSync();
+
+      // Turning on the spot is the practical self test.
+      expect(source, contains('full '));
+      expect(source, contains('keeps the Kaaba fixed'));
+      // And spinning must be described as harmless, since it is.
+      expect(source, contains('Spinning the phone does '));
+    });
+  });
+
   group('the turn from north', () {
     /// Mirrors the rule the screen uses: bearings up to half a circle turn
     /// right, the rest turn left by the shorter way round.
