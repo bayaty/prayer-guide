@@ -59,20 +59,14 @@ class _AppShellState extends State<AppShell> {
   ];
 
 
-  /// A navigation tab labelled with the prayer's time for today, marked with
-  /// a star while that prayer's time is in.
+  /// A navigation tab for one prayer, marked with a star while that
+  /// prayer's time is in.
   NavigationDestination _prayerTab(
     IconData icon,
     IconData selectedIcon,
     String name,
   ) {
-    final minutes = AzanTimes.instance.today?.forPrayer(name);
     final isNow = ActivePrayer.instance.isNow(name);
-
-    // The label carries the time, so the bar doubles as a timetable.
-    final label = minutes == null
-        ? name
-        : '$name  ${AzanTimes.format(minutes)}';
 
     // A star sits on the icon of whichever prayer is in.
     Widget mark(Widget child) {
@@ -93,7 +87,7 @@ class _AppShellState extends State<AppShell> {
     return NavigationDestination(
       icon: mark(Icon(icon)),
       selectedIcon: mark(Icon(selectedIcon, color: AppColors.primary)),
-      label: label,
+      label: name,
     );
   }
 
