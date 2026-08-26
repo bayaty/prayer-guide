@@ -3,6 +3,7 @@ import '../theme/app_colors.dart';
 import '../widgets/info_section.dart';
 import '../widgets/practice_mode_toggle.dart';
 import '../widgets/step_icon.dart';
+import '../data/app_settings.dart';
 import '../data/practice_mode.dart';
 import '../data/wudu_data.dart';
 import 'settings_screen.dart';
@@ -115,7 +116,9 @@ class _WuduCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasDua = step.arabicText.isNotEmpty;
+    final s = AppSettings.instance;
+    // The supplication block is pointless when every part of it is hidden.
+    final hasDua = step.arabicText.isNotEmpty && !s.hideAllText;
     final extraSunnahs = PracticeMode.instance.extraSunnahs;
     final shownTimes = step.timesFor(extraSunnahs: extraSunnahs);
 
@@ -210,33 +213,40 @@ class _WuduCard extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      step.arabicText,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        height: 1.9,
-                        color: Colors.black87,
+                    if (s.showArabic)
+                      Text(
+                        step.arabicText,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          height: 1.9,
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
                       ),
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      step.transliteration,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey[700],
+                    if (s.showTransliteration) ...[
+                      if (s.showArabic) const SizedBox(height: 8),
+                      Text(
+                        step.transliteration,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.grey[700],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      step.translation,
-                      style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
-                      textAlign: TextAlign.center,
-                    ),
+                    ],
+                    if (s.showTranslation) ...[
+                      if (s.showArabic || s.showTransliteration)
+                        const SizedBox(height: 4),
+                      Text(
+                        step.translation,
+                        style:
+                            TextStyle(fontSize: 12.5, color: Colors.grey[600]),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ],
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data/app_settings.dart';
 import '../data/practice_mode.dart';
 import '../theme/app_colors.dart';
 import '../widgets/practice_mode_toggle.dart';
@@ -44,6 +45,7 @@ class PrayerScreen extends StatelessWidget {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
               title: Text(
                 '${prayer.name} Prayer',
                 style: const TextStyle(
@@ -59,20 +61,20 @@ class PrayerScreen extends StatelessWidget {
                     colors: [AppColors.accent, AppColors.primary],
                   ),
                 ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        prayer.arabicName,
-                        style: const TextStyle(fontSize: 40, color: Colors.white),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    // Sits above the collapsing title so the two never
+                    // overlap or read as a repeated name.
+                    padding: const EdgeInsets.only(bottom: 56),
+                    child: Text(
+                      prayer.timeDescription,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 15,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        prayer.timeDescription,
-                        style: const TextStyle(color: Colors.white70, fontSize: 14),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -209,14 +211,18 @@ class _StepPreviewTile extends StatelessWidget {
         ),
         title: Text(
           step.title,
+          textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
         ),
-        subtitle: Text(
-          step.transliteration.split('\n').first,
-          style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+        subtitle: AppSettings.instance.showTransliteration
+            ? Text(
+                step.transliteration.split('\n').first,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              )
+            : null,
         trailing: StepIcon(step.icon, size: 26),
       ),
     );

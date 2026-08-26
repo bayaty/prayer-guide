@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data/app_settings.dart';
 import '../data/practice_mode.dart';
 import '../theme/app_colors.dart';
 import '../widgets/info_section.dart';
@@ -182,67 +183,10 @@ class _StepCard extends StatelessWidget {
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
-                  const Text(
-                    'Arabic',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.highlight,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    step.arabicText,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      height: 2,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
-                  ),
-                  const Divider(height: 32),
-                  const Text(
-                    'Transliteration',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.highlight,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    step.transliteration,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.grey[700],
-                      height: 1.6,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const Divider(height: 32),
-                  const Text(
-                    'Translation',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.highlight,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    step.translation,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[800],
-                      height: 1.6,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  // Sections are assembled from whichever the user has
+                  // enabled, so dividers only ever fall between two visible
+                  // blocks.
+                  ..._sections(context, step),
                 ],
               ),
             ),
@@ -252,6 +196,77 @@ class _StepCard extends StatelessWidget {
       ),
     );
   }
+
+  /// Builds the Arabic, transliteration and translation blocks the user has
+  /// chosen to see, separated by dividers only where two blocks meet.
+  List<Widget> _sections(BuildContext context, PrayerStep step) {
+    final s = AppSettings.instance;
+
+    Widget label(String text) => Text(
+          text,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: AppColors.highlight,
+            letterSpacing: 1,
+          ),
+        );
+
+    final blocks = <List<Widget>>[
+      if (s.showArabic)
+        [
+          label('Arabic'),
+          const SizedBox(height: 12),
+          Text(
+            step.arabicText,
+            style: const TextStyle(
+              fontSize: 24,
+              height: 2,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.rtl,
+          ),
+        ],
+      if (s.showTransliteration)
+        [
+          label('Transliteration'),
+          const SizedBox(height: 12),
+          Text(
+            step.transliteration,
+            style: TextStyle(
+              fontSize: 17,
+              fontStyle: FontStyle.italic,
+              color: Colors.grey[700],
+              height: 1.6,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      if (s.showTranslation)
+        [
+          label('Translation'),
+          const SizedBox(height: 12),
+          Text(
+            step.translation,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey[800],
+              height: 1.6,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+    ];
+
+    final out = <Widget>[];
+    for (var i = 0; i < blocks.length; i++) {
+      if (i > 0) out.add(const Divider(height: 32));
+      out.addAll(blocks[i]);
+    }
+    return out;
+  }
+
 }
 
 class _NavigationBar extends StatelessWidget {

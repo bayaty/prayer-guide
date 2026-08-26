@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../data/app_settings.dart';
 import '../services/update_service.dart';
 import '../theme/app_colors.dart';
 
@@ -105,6 +106,89 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.all(16),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.translate,
+                                color: AppColors.primary, size: 22),
+                            SizedBox(width: 8),
+                            Text(
+                              'Step Text',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Choose what to show with each supplication.',
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey[600],
+                              height: 1.4),
+                        ),
+                        const SizedBox(height: 6),
+                        AnimatedBuilder(
+                          animation: AppSettings.instance,
+                          builder: (context, _) {
+                            final s = AppSettings.instance;
+                            return Column(
+                              children: [
+                                _TextSwitch(
+                                  label: 'Arabic',
+                                  value: s.showArabic,
+                                  onChanged: s.setShowArabic,
+                                ),
+                                _TextSwitch(
+                                  label: 'Transliteration',
+                                  value: s.showTransliteration,
+                                  onChanged: s.setShowTransliteration,
+                                ),
+                                _TextSwitch(
+                                  label: 'Translation',
+                                  value: s.showTranslation,
+                                  onChanged: s.setShowTranslation,
+                                ),
+                                if (s.hideAllText) ...[
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.tintBg,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: AppColors.softPink),
+                                    ),
+                                    child: Text(
+                                      'All three are hidden, so steps show '
+                                      'only their instructions.',
+                                      style: TextStyle(
+                                          fontSize: 12.5,
+                                          color: Colors.grey[800]),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
@@ -284,6 +368,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: Colors.black87),
         ),
       ],
+    );
+  }
+}
+
+
+/// A compact labelled switch used by the step-text settings.
+class _TextSwitch extends StatelessWidget {
+  final String label;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _TextSwitch({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: () => onChanged(!value),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14.5,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            Switch(
+              value: value,
+              activeThumbColor: AppColors.accent,
+              onChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
