@@ -47,47 +47,13 @@ class PrayerScreen extends StatelessWidget {
                 ),
               ),
             ],
-            // Room for the name, the window and the badge once collapsed.
-            toolbarHeight: 64,
+            // The collapsed bar carries the prayer, its window and the star.
+            // It is faded in only once the header has actually shrunk, so it
+            // never sits on top of the full header.
+            title: _CollapsedTitle(prayer: prayer),
+            centerTitle: true,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              titlePadding: const EdgeInsets.symmetric(
-                horizontal: 52,
-                vertical: 12,
-              ),
-              // Shown while scrolled down, so the prayer and its window stay
-              // on screen through the steps.
-              title: AnimatedBuilder(
-                animation: ActivePrayer.instance,
-                builder: (context, _) {
-                  final window = ActivePrayer.windowLabel(prayer.name);
-                  final isNow = ActivePrayer.instance.isNow(prayer.name);
-
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          window == null
-                              ? prayer.name
-                              : '${prayer.name}  $window',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      if (isNow) ...[
-                        const SizedBox(width: 6),
-                        const NowBadge(compact: true),
-                      ],
-                    ],
-                  );
-                },
-              ),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -316,6 +282,72 @@ class _StepPreviewTile extends StatelessWidget {
               )
             : null,
         trailing: StepIcon(step.icon, size: 26),
+      ),
+    );
+  }
+}
+
+/// The bar shown once the header has been scrolled away.
+///
+/// A SliverAppBar always builds its title, so this measures how far the
+/// header has collapsed and fades in only over the last stretch. Without
+/// that the title would sit on top of the expanded header.
+class _CollapsedTitle extends StatelessWidget {
+  final Prayer prayer;
+
+  const _CollapsedTitle({required this.prayer});
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context
+        .dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+
+    var opacity = 1.0;
+    if (settings != null) {
+      final range = settings.maxExtent - settings.minExtent;
+      if (range > 0) {
+        // 0 when fully expanded, 1 when fully collapsed.
+        final collapsed =
+            ((settings.maxExtent - settings.currentExtent) / range)
+                .clamp(0.0, 1.0);
+        // Hold back until the header is most of the way closed, then fade in
+        // quickly, so the two never overlap.
+        opacity = ((collapsed - 0.7) / 0.25).clamp(0.0, 1.0);
+      }
+    }
+
+    if (opacity == 0) return const SizedBox.shrink();
+
+    return Opacity(
+      opacity: opacity,
+      child: AnimatedBuilder(
+        animation: ActivePrayer.instance,
+        builder: (context, _) {
+          final window = ActivePrayer.windowLabel(prayer.name);
+          final isNow = ActivePrayer.instance.isNow(prayer.name);
+
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  window == null ? prayer.name : '${prayer.name}  $window',
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              if (isNow) ...[
+                const SizedBox(width: 6),
+                const NowBadge(compact: true),
+              ],
+            ],
+          );
+        },
       ),
     );
   }
