@@ -140,6 +140,220 @@ class _QiblaScreenState extends State<QiblaScreen> {
           ),
           const SizedBox(height: 20),
           _readout(bearing, distance, heading),
+          const SizedBox(height: 16),
+          _instructions(bearing, heading),
+        ],
+      ),
+    );
+  }
+
+  /// How to use the dial, and what will throw it off.
+  Widget _instructions(double bearing, double? heading) {
+    final working = _hasCompass && heading != null;
+
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Row(
+              children: [
+                Icon(Icons.help_outline, color: AppColors.primary, size: 20),
+                SizedBox(width: 8),
+                Text(
+                  'How to use it',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (working) ...[
+              _step(1, 'Pick your city from the list above.'),
+              _step(2,
+                  'Hold the phone flat, screen up and level with the '
+                  'ground.'),
+              _step(3,
+                  'Turn your whole body slowly until the gold arrow points '
+                  'straight up.'),
+              _step(4, 'Facing that way, you are facing the qibla.'),
+              _step(5,
+                  'To check it, the N on the dial should sit over true '
+                  'north. The notes below give a few ways to find it.'),
+            ] else ...[
+              _step(1, 'Pick your city from the list above.'),
+              _step(2,
+                  'This device has no compass, so the dial cannot turn with '
+                  'you. Find north first, using the notes below.'),
+              _step(3, 'Stand facing north.'),
+              _step(4, _turnInstruction(bearing)),
+            ],
+            const SizedBox(height: 14),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.softPink),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Finding north without the phone',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  _note(
+                    'The sun rises roughly in the east and sets roughly in '
+                    'the west. Stand with your right hand towards sunrise '
+                    'and you are facing north.',
+                  ),
+                  _note(
+                    'At midday, well north of the equator, the sun sits due '
+                    'south and your shadow points north. Well south of the '
+                    'equator it is the other way round. Close to the equator '
+                    'this one does not help.',
+                  ),
+                  _note(
+                    'Push a stick upright into the ground and mark the tip '
+                    'of its shadow, wait about fifteen minutes and mark it '
+                    'again. The line from the first mark to the second runs '
+                    'roughly west to east.',
+                  ),
+                  _note(
+                    'On a clear night the Pole Star sits over true north. '
+                    'Find the Plough, or Big Dipper, and follow the two '
+                    'stars at the end of its bowl upwards.',
+                  ),
+                  _note(
+                    'Satellite dishes in North America and Europe generally '
+                    'face the equator, so towards the south.',
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.tintBg,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.softPink),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'What throws it off',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  _note(
+                    'Metal and magnets pull the reading around. Step away '
+                    'from cars, desks, speakers and magnetic phone cases.',
+                  ),
+                  _note(
+                    'If the arrow drifts or sticks, wave the phone in a '
+                    'figure of eight to settle it.',
+                  ),
+                  _note(
+                    'The bearing is measured from true north. A magnetic '
+                    'compass reads a little differently depending on where '
+                    'you are, so trust the dial here over a cheap compass.',
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Describes the turn from north as the shorter way round, so an eastern
+  /// bearing reads as a small turn to the left rather than a large one to
+  /// the right.
+  String _turnInstruction(double bearing) {
+    final point = Qibla.compassPoint(bearing);
+
+    if (bearing <= 180) {
+      return 'Turn ${bearing.toStringAsFixed(0)} degrees to your right, '
+          'towards the $point. That is the qibla.';
+    }
+    final left = 360 - bearing;
+    return 'Turn ${left.toStringAsFixed(0)} degrees to your left, '
+        'towards the $point. That is the qibla.';
+  }
+
+  Widget _step(int number, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 22,
+            height: 22,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.accent.withValues(alpha: 0.18),
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              '$number',
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 13.5, height: 1.4),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _note(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('  \u2022 ', style: TextStyle(color: Colors.grey[700])),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[700],
+                height: 1.45,
+              ),
+            ),
+          ),
         ],
       ),
     );
