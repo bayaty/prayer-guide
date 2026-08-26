@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../data/active_prayer.dart';
+import '../data/azan_times.dart';
+import '../widgets/now_badge.dart';
 import '../data/app_settings.dart';
 import '../data/practice_mode.dart';
 import '../theme/app_colors.dart';
@@ -67,14 +70,47 @@ class PrayerScreen extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        prayer.timeDescription,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
+                      const SizedBox(height: 2),
+                      // Today's call to prayer, straight from the timetable.
+                      AnimatedBuilder(
+                        animation: ActivePrayer.instance,
+                        builder: (context, _) {
+                          final today = AzanTimes.instance.today;
+                          final minutes = today?.forPrayer(prayer.name);
+                          final isNow = ActivePrayer.instance.isNow(
+                            prayer.name,
+                          );
+
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (minutes != null)
+                                Text(
+                                  AzanTimes.format(minutes),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              const SizedBox(height: 2),
+                              Text(
+                                prayer.timeDescription,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              if (isNow) ...[
+                                const SizedBox(height: 8),
+                                const NowBadge(),
+                              ],
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),

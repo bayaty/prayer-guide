@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'data/active_prayer.dart';
+import 'data/azan_times.dart';
 import 'data/app_settings.dart';
 import 'theme/app_colors.dart';
 import 'data/prayer_data.dart';
 import 'screens/wudu_screen.dart';
+import 'widgets/now_badge.dart';
 import 'screens/prayer_screen.dart';
 
 Future<void> main() async {
@@ -10,6 +13,8 @@ Future<void> main() async {
   // Read saved preferences before the first frame so the app opens with the
   // user's saved practice mode already applied.
   await AppSettings.instance.load();
+  await AzanTimes.instance.load();
+  ActivePrayer.instance.start();
   runApp(const SalahGuideApp());
 }
 
@@ -53,6 +58,45 @@ class _AppShellState extends State<AppShell> {
     PrayerScreen(prayer: prayers[4]),
   ];
 
+
+  /// A navigation tab labelled with the prayer's time for today, marked with
+  /// a star while that prayer's time is in.
+  NavigationDestination _prayerTab(
+    IconData icon,
+    IconData selectedIcon,
+    String name,
+  ) {
+    final minutes = AzanTimes.instance.today?.forPrayer(name);
+    final isNow = ActivePrayer.instance.isNow(name);
+
+    // The label carries the time, so the bar doubles as a timetable.
+    final label = minutes == null
+        ? name
+        : '$name  ${AzanTimes.format(minutes)}';
+
+    // A star sits on the icon of whichever prayer is in.
+    Widget mark(Widget child) {
+      if (!isNow) return child;
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          child,
+          const Positioned(
+            top: -5,
+            right: -8,
+            child: NowBadge(compact: true),
+          ),
+        ],
+      );
+    }
+
+    return NavigationDestination(
+      icon: mark(Icon(icon)),
+      selectedIcon: mark(Icon(selectedIcon, color: AppColors.primary)),
+      label: label,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,47 +104,32 @@ class _AppShellState extends State<AppShell> {
         index: _selectedIndex,
         children: _screens,
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() => _selectedIndex = index);
-        },
-        backgroundColor: Colors.white,
-        indicatorColor: AppColors.accent.withAlpha(30),
-        height: 70,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.water_drop_outlined),
-            selectedIcon: Icon(Icons.water_drop, color: AppColors.primary),
-            label: 'Wudu',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.wb_twilight_outlined),
-            selectedIcon: Icon(Icons.wb_twilight, color: AppColors.primary),
-            label: 'Fajr',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.wb_sunny_outlined),
-            selectedIcon: Icon(Icons.wb_sunny, color: AppColors.primary),
-            label: 'Dhuhr',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.sunny_snowing),
-            selectedIcon: Icon(Icons.sunny_snowing, color: AppColors.primary),
-            label: 'Asr',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.wb_twighlight),
-            selectedIcon: Icon(Icons.wb_twighlight, color: AppColors.primary),
-            label: 'Maghrib',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.nightlight_outlined),
-            selectedIcon: Icon(Icons.nightlight, color: AppColors.primary),
-            label: 'Isha',
-          ),
-        ],
+      // The bar rebuilds every minute so the times and the marker stay
+      // current without the user reopening the app.
+      bottomNavigationBar: AnimatedBuilder(
+        animation: ActivePrayer.instance,
+        builder: (context, _) => NavigationBar(
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: (index) {
+            setState(() => _selectedIndex = index);
+          },
+          backgroundColor: Colors.white,
+          indicatorColor: AppColors.accent.withAlpha(30),
+          height: 74,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          destinations: [
+            const NavigationDestination(
+              icon: Icon(Icons.water_drop_outlined),
+              selectedIcon: Icon(Icons.water_drop, color: AppColors.primary),
+              label: 'Wudu',
+            ),
+            _prayerTab(Icons.wb_twilight_outlined, Icons.wb_twilight, 'Fajr'),
+            _prayerTab(Icons.wb_sunny_outlined, Icons.wb_sunny, 'Dhuhr'),
+            _prayerTab(Icons.sunny_snowing, Icons.sunny_snowing, 'Asr'),
+            _prayerTab(Icons.wb_twighlight, Icons.wb_twighlight, 'Maghrib'),
+            _prayerTab(Icons.nightlight_outlined, Icons.nightlight, 'Isha'),
+          ],
+        ),
       ),
     );
   }
