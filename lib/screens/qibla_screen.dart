@@ -94,7 +94,10 @@ class _QiblaScreenState extends State<QiblaScreen> {
                     angle: turn,
                     child: CustomPaint(
                       size: const Size(280, 280),
-                      painter: _DialPainter(bearing: bearing),
+                      painter: _DialPainter(
+                        bearing: bearing,
+                        dialRotation: turn,
+                      ),
                     ),
                   ),
                   // Sits on a disc so the needle passes behind the reading
@@ -457,7 +460,11 @@ class _QiblaScreenState extends State<QiblaScreen> {
 class _DialPainter extends CustomPainter {
   final double bearing;
 
-  const _DialPainter({required this.bearing});
+  /// How far the whole dial has been turned, in radians. The Kaaba is
+  /// turned back by the same amount so it never appears upside down.
+  final double dialRotation;
+
+  const _DialPainter({required this.bearing, this.dialRotation = 0});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -503,10 +510,14 @@ class _DialPainter extends CustomPainter {
       painter.paint(canvas, at - Offset(painter.width / 2, painter.height / 2));
     }
 
-    // The arrow to the Kaaba.
+    // The arrow to the Kaaba, stopping short so the Kaaba itself sits at
+    // the end of it.
     final a = (bearing - 90) * math.pi / 180;
-    final tip = centre + Offset(math.cos(a) * (radius - 6),
-        math.sin(a) * (radius - 6));
+    const kaabaSize = 30.0;
+    final kaabaAt = centre +
+        Offset(math.cos(a) * (radius - 20), math.sin(a) * (radius - 20));
+    final tip = centre +
+        Offset(math.cos(a) * (radius - 42), math.sin(a) * (radius - 42));
 
     final shaft = Paint()
       ..strokeWidth = 4
@@ -517,7 +528,7 @@ class _DialPainter extends CustomPainter {
     // Arrow head.
     final head = Path();
     const spread = 0.32;
-    const len = 26.0;
+    const len = 22.0;
     head.moveTo(tip.dx, tip.dy);
     head.lineTo(
       tip.dx - math.cos(a - spread) * len,
@@ -530,9 +541,29 @@ class _DialPainter extends CustomPainter {
     head.close();
     canvas.drawPath(head, Paint()..color = const Color(0xFFD4A017));
 
+    // The Kaaba, marking what the arrow points at. It is turned back
+    // against the dial so it always sits upright however the phone is held.
+    final kaaba = TextPainter(
+      text: const TextSpan(
+        text: '🕋',
+        style: TextStyle(fontSize: kaabaSize),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+
+    canvas.save();
+    canvas.translate(kaabaAt.dx, kaabaAt.dy);
+    canvas.rotate(-dialRotation);
+    kaaba.paint(
+      canvas,
+      Offset(-kaaba.width / 2, -kaaba.height / 2),
+    );
+    canvas.restore();
+
     canvas.drawCircle(centre, 6, Paint()..color = AppColors.primary);
   }
 
   @override
-  bool shouldRepaint(_DialPainter old) => old.bearing != bearing;
+  bool shouldRepaint(_DialPainter old) =>
+      old.bearing != bearing || old.dialRotation != dialRotation;
 }
