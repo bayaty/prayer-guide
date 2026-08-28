@@ -7,6 +7,7 @@ import '../data/practice_mode.dart';
 import '../theme/app_colors.dart';
 import '../widgets/practice_mode_toggle.dart';
 import '../widgets/step_icon.dart';
+import '../widgets/step_detail_card.dart';
 import 'settings_screen.dart';
 import '../data/prayer_data.dart';
 import 'prayer_steps_screen.dart';
@@ -27,6 +28,7 @@ class PrayerScreen extends StatelessWidget {
   Widget _build(BuildContext context) {
     final visible = PracticeMode.instance
         .filter<PrayerStep>(prayer.steps, (s) => s.level);
+    final fullDetail = AppSettings.instance.fullDetail;
 
     return Scaffold(
       body: CustomScrollView(
@@ -187,7 +189,7 @@ class PrayerScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverToBoxAdapter(
               child: Text(
-                'Overview',
+                fullDetail ? 'All Steps' : 'Overview',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -211,20 +213,38 @@ class PrayerScreen extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final step = visible[index];
+                  void open() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PrayerStepsScreen(
+                          prayer: prayer,
+                          initialStep: index,
+                        ),
+                      ),
+                    );
+                  }
+
+                  // In full-detail mode every step is laid out in one long
+                  // read, so a learner never has to tap through. The compact
+                  // tile stays for anyone who only wants the running order.
+                  if (fullDetail) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: StepDetailCard(
+                        step: step,
+                        stepNumber: index + 1,
+                        onTap: open,
+                        bottomPadding: 0,
+                        scrollable: false,
+                      ),
+                    );
+                  }
+
                   return _StepPreviewTile(
                     step: step,
                     index: index,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PrayerStepsScreen(
-                            prayer: prayer,
-                            initialStep: index,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: open,
                   );
                 },
                 childCount: visible.length,

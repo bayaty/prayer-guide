@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import '../data/app_settings.dart';
 import '../data/practice_mode.dart';
 import '../theme/app_colors.dart';
-import '../widgets/info_section.dart';
-import '../widgets/step_icon.dart';
+import '../widgets/step_detail_card.dart';
 import '../data/prayer_data.dart';
 
 class PrayerStepsScreen extends StatefulWidget {
@@ -97,7 +95,7 @@ class _PrayerStepsScreenState extends State<PrayerStepsScreen> {
               },
               itemCount: steps.length,
               itemBuilder: (context, index) {
-                return _StepCard(step: steps[index]);
+                return StepDetailCard(step: steps[index]);
               },
             ),
           ),
@@ -111,162 +109,6 @@ class _PrayerStepsScreenState extends State<PrayerStepsScreen> {
       ),
     );
   }
-}
-
-class _StepCard extends StatelessWidget {
-  final PrayerStep step;
-
-  const _StepCard({required this.step});
-
-  @override
-  Widget build(BuildContext context) {
-    final sections = _sections(context, step);
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        children: [
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            elevation: 3,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  StepIcon(step.icon, size: 56),
-                  const SizedBox(height: 12),
-                  Text(
-                    step.title,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.tintBg,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppColors.softPink,
-                      ),
-                    ),
-                    child: Text(
-                      step.instruction,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[800],
-                        height: 1.5,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  if (step.info.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    InfoSection(step.info),
-                  ],
-                ],
-              ),
-            ),
-          ),
-          // Sections are assembled from whichever the user has enabled and
-          // the step actually has, so dividers only fall between two visible
-          // blocks and the card disappears entirely when nothing is left.
-          if (sections.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(children: sections),
-              ),
-            ),
-          ],
-          const SizedBox(height: 80),
-        ],
-      ),
-    );
-  }
-
-  /// Builds the Arabic, transliteration and translation blocks the user has
-  /// chosen to see, separated by dividers only where two blocks meet.
-  List<Widget> _sections(BuildContext context, PrayerStep step) {
-    final s = AppSettings.instance;
-
-    Widget label(String text) => Text(
-          text,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.highlight,
-            letterSpacing: 1,
-          ),
-        );
-
-    final blocks = <List<Widget>>[
-      if (s.showArabic && step.arabicText.trim().isNotEmpty)
-        [
-          label('Arabic'),
-          const SizedBox(height: 12),
-          Text(
-            step.arabicText,
-            style: const TextStyle(
-              fontSize: 24,
-              height: 2,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
-          ),
-        ],
-      if (s.showTransliteration && step.transliteration.trim().isNotEmpty)
-        [
-          label('Transliteration'),
-          const SizedBox(height: 12),
-          Text(
-            step.transliteration,
-            style: TextStyle(
-              fontSize: 17,
-              fontStyle: FontStyle.italic,
-              color: Colors.grey[700],
-              height: 1.6,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      if (s.showTranslation && step.translation.trim().isNotEmpty)
-        [
-          label('Translation'),
-          const SizedBox(height: 12),
-          Text(
-            step.translation,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey[800],
-              height: 1.6,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-    ];
-
-    final out = <Widget>[];
-    for (var i = 0; i < blocks.length; i++) {
-      if (i > 0) out.add(const Divider(height: 32));
-      out.addAll(blocks[i]);
-    }
-    return out;
-  }
-
 }
 
 class _NavigationBar extends StatelessWidget {

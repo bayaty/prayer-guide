@@ -14,6 +14,7 @@ class AppSettings extends ChangeNotifier {
   static const _kShowArabic = 'show_arabic';
   static const _kShowTransliteration = 'show_transliteration';
   static const _kShowTranslation = 'show_translation';
+  static const _kFullDetail = 'full_detail';
 
   SharedPreferences? _prefs;
 
@@ -21,6 +22,7 @@ class AppSettings extends ChangeNotifier {
   bool _showArabic = true;
   bool _showTransliteration = true;
   bool _showTranslation = true;
+  bool _fullDetail = false;
 
   bool get extraSunnahs => _extraSunnahs;
 
@@ -37,6 +39,11 @@ class AppSettings extends ChangeNotifier {
   bool get hideAllText =>
       !_showArabic && !_showTransliteration && !_showTranslation;
 
+  /// Whether the prayer screen lists every step in full, rather than a short
+  /// overview. On for someone learning, off for someone who just needs a
+  /// reminder of the order.
+  bool get fullDetail => _fullDetail;
+
 
   /// True once [load] has finished reading from disk.
   bool get isLoaded => _prefs != null;
@@ -48,6 +55,7 @@ class AppSettings extends ChangeNotifier {
     _showArabic = prefs.getBool(_kShowArabic) ?? true;
     _showTransliteration = prefs.getBool(_kShowTransliteration) ?? true;
     _showTranslation = prefs.getBool(_kShowTranslation) ?? true;
+    _fullDetail = prefs.getBool(_kFullDetail) ?? false;
     notifyListeners();
   }
 
@@ -77,6 +85,13 @@ class AppSettings extends ChangeNotifier {
     _showTranslation = value;
     notifyListeners();
     await _prefs?.setBool(_kShowTranslation, value);
+  }
+
+  Future<void> setFullDetail(bool value) async {
+    if (_fullDetail == value) return;
+    _fullDetail = value;
+    notifyListeners();
+    await _prefs?.setBool(_kFullDetail, value);
   }
 
 }
