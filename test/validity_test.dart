@@ -122,7 +122,7 @@ void main() {
         'Prostration',
         'Sitting Between Prostrations',
         'Sitting Testification',
-        'Blessings and Closing Peace',
+        'Closing Peace',
       ];
 
       for (final p in prayers) {
@@ -223,8 +223,8 @@ void main() {
         expect(minimalPrayer(p).last.title, contains('Closing Peace'),
             reason: '${p.name} must end with the closing greeting');
         expect(completePrayer(p).last.title,
-            contains('Blessings and Closing Peace'),
-            reason: '${p.name} must end with the blessings and greeting');
+            contains('Closing Peace'),
+            reason: '${p.name} must end with the closing greeting');
       }
     });
 
@@ -238,7 +238,7 @@ void main() {
         // Replaced by the simplified stand-ins, not dropped outright.
         'Recite the Opening Chapter',
         'Sitting Testification',
-        'Blessings and Closing Peace',
+        'Closing Peace',
       ];
 
       for (final p in prayers) {
@@ -262,7 +262,7 @@ void main() {
         final replaced = {
           'Recite the Opening Chapter': 'Praise Allah',
           'Sitting Testification': 'Sitting (',
-          'Blessings and Closing Peace': 'Closing Peace',
+          'Closing Peace': 'Closing Peace',
         };
 
         replaced.forEach((removed, standIn) {

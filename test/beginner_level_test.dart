@@ -135,7 +135,7 @@ void main() {
       // ends the prayer.
       final steps = stepsFor(named('Fajr'), complete: false);
       final closing = steps.last;
-      expect(closing.transliteration, contains('As-salamu alaikum'));
+      expect(closing.transliteration, contains('Assalamu alaikum'));
     });
 
     test('a beginner is not asked for the blessings', () {

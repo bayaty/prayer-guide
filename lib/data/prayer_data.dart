@@ -48,7 +48,7 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'اللَّهُ أَكْبَرُ',
     transliteration: 'Allahu Akbar',
     translation: 'Allah is the Greatest',
-    instruction: 'Stand facing the Qibla (the direction of Makkah). Raise your hands to your ears and say the Takbir to begin the prayer.',
+    instruction: 'Stand facing Makkah. Raise your hands to your ears and say "Allahu Akbar" to begin the prayer.',
     icon: 'posture:standing',
     info:
         'Qiyam marks the moment you leave worldly matters behind and stand '
@@ -119,7 +119,7 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'سُبْحَانَ رَبِّيَ الْعَظِيمِ',
     transliteration: 'Subhana Rabbiyal Azeem',
     translation: 'Glory be to my Lord, the Most Great',
-    instruction: 'Say "Allahu Akbar" and bow down, placing your hands on your knees. Keep your back straight. Say these words 3 times.',
+    instruction: 'Say "Allahu Akbar" and bow, placing your hands on your knees with your back straight. Say these words 3 times.',
     icon: 'posture:bowing',
     info:
         'Bowing is for glorifying Allah rather than asking. The Prophet '
@@ -129,23 +129,25 @@ final List<PrayerStep> _oneRakah = [
   ),
   const PrayerStep(
     title: 'Rising from Bowing',
-    arabicText: 'سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ\nرَبَّنَا وَلَكَ الْحَمْدُ',
-    transliteration: 'Sami\' Allahu liman hamidah\nRabbana wa lakal hamd',
-    translation: 'Allah hears the one who praises Him.\nOur Lord, to You belongs all praise.',
-    instruction: 'Rise back to standing position while saying "Sami Allahu liman hamidah", then say "Rabbana wa lakal hamd".',
+    arabicText: 'اللَّهُ أَكْبَرُ',
+    transliteration: 'Allahu Akbar',
+    translation: 'Allah is the Greatest',
+    instruction: 'Say "Allahu Akbar" and stand back up.',
     icon: 'posture:standing',
     info:
-        'Standing upright again is its own required posture, not a rushed '
-        'transition. It is one of the few moments in the prayer where '
-        'praise is voiced aloud in response to Allah hearing the one who '
-        'praises Him.',
+        'Standing upright again is its own posture, not a rushed transition. '
+        'Stand still before moving on. Once these words carry you through '
+        'the prayer, the fuller wording said here is "Sami\' Allahu liman '
+        'hamidah", meaning "Allah hears the one who praises Him", answered '
+        'with "Rabbana wa lakal hamd", "Our Lord, to You belongs all '
+        'praise".',
   ),
   const PrayerStep(
     title: 'First Prostration',
     arabicText: 'سُبْحَانَ رَبِّيَ الْأَعْلَىٰ',
     transliteration: 'Subhana Rabbiyal A\'la',
     translation: 'Glory be to my Lord, the Most High',
-    instruction: 'Say "Allahu Akbar" and prostrate with your forehead, nose, both palms, both knees, and toes touching the ground. Say these words 3 times.',
+    instruction: 'Say "Allahu Akbar" and prostrate, with your forehead, nose, both palms, both knees and toes touching the ground. Say these words 3 times.',
     icon: 'posture:prostrating',
     info:
         'This is the best place and time to make dua. The Prophet said '
@@ -211,22 +213,23 @@ final List<PrayerStep> _tashahhud = [
     arabicText: 'اللَّهُ أَكْبَرُ',
     transliteration: 'Allahu Akbar',
     translation: 'Allah is the Greatest',
-    instruction: 'Sit with your left foot under you and right foot upright. While you are still learning the testification, say "Allahu Akbar" about ten times here, unhurried.',
+    instruction: 'Sit with your left foot under you and your right foot '
+        'upright. While you are still learning the testification, say '
+        '"Allahu Akbar" here, staying for about as long as it takes to say '
+        'it ten times so the sitting is not rushed.',
     icon: 'posture:sitting',
     level: StepLevel.beginner,
     info:
-        'A stand-in while you memorise the testification, which is the '
-        'wording said in this sitting. Saying Allahu Akbar keeps the '
-        'sitting occupied with remembrance instead of silence, so the shape '
-        'of the prayer is learned first and the words are added as they '
-        'come. Move to Complete Steps once you know the testification.',
+        'The sitting has its own length. Rather than rushing through it '
+        'while the longer words are still being learned, fill it with what '
+        'you already know and keep it unhurried.',
   ),
   const PrayerStep(
     title: 'Sitting Testification',
     arabicText: 'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ\nالسَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ\nالسَّلَامُ عَلَيْنَا وَعَلَىٰ عِبَادِ اللَّهِ الصَّالِحِينَ\nأَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ',
     transliteration: 'At-tahiyyatu lillahi was-salawatu wat-tayyibat\nAs-salamu \'alaika ayyuhan-Nabiyyu wa rahmatullahi wa barakatuh\nAs-salamu \'alaina wa \'ala \'ibadillahis-saliheen\nAsh-hadu an la ilaha illallah wa ash-hadu anna Muhammadan \'abduhu wa rasuluh',
     translation: 'All greetings, prayers, and good things are for Allah.\nPeace be upon you, O Prophet, and the mercy of Allah and His blessings.\nPeace be upon us and upon the righteous servants of Allah.\nI bear witness that there is no god but Allah, and I bear witness that Muhammad is His servant and messenger.',
-    instruction: 'Sit with your left foot under you and right foot upright. Point your right index finger. Recite the words below.',
+    instruction: 'Sit with your left foot under you and your right foot upright. Point your right index finger and recite the words below. Stay for about as long as it takes to say "Allahu Akbar" ten times, so the sitting is not rushed.',
     icon: 'posture:sitting',
     level: StepLevel.learning,
     info:
@@ -243,31 +246,18 @@ final List<PrayerStep> _closing = [
   const PrayerStep(
     title: 'Closing Peace',
     arabicText: 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ',
-    transliteration: 'As-salamu alaikum wa rahmatullah',
+    transliteration: 'Assalamu alaikum wa rahmatullah',
     translation: 'Peace and mercy of Allah be upon you',
-    instruction: 'Turn your head to the right and say it, then turn to the left and say it again. This ends the prayer.',
+    instruction: 'Turn your head to the right and say "Assalamu alaikum". '
+        'Then turn your head to the left and say it again. This ends the '
+        'prayer.',
     icon: '🕊️',
-    level: StepLevel.beginner,
     info:
-        'This ends the prayer, and it is the one part to say in full from '
-        'the very beginning: it is short, and it is what actually closes '
-        'the prayer. Turning to each side greets the angels and anyone '
-        'praying beside you. The blessings upon the Prophet come just '
-        'before this once you have learned them.',
-  ),
-  const PrayerStep(
-    title: 'Blessings and Closing Peace',
-    arabicText: 'اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ\nكَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ\nإِنَّكَ حَمِيدٌ مَجِيدٌ\nاللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ\nكَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ\nإِنَّكَ حَمِيدٌ مَجِيدٌ\n\nالسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ',
-    transliteration: 'Allahumma salli \'ala Muhammad wa \'ala ali Muhammad\nKama sallaita \'ala Ibrahim wa \'ala ali Ibrahim\nInnaka Hameedun Majeed\nAllahumma barik \'ala Muhammad wa \'ala ali Muhammad\nKama barakta \'ala Ibrahim wa \'ala ali Ibrahim\nInnaka Hameedun Majeed\n\nAssalamu alaikum wa rahmatullah',
-    translation: 'O Allah, send prayers upon Muhammad and upon the family of Muhammad,\nas You sent prayers upon Ibrahim and the family of Ibrahim.\nIndeed, You are Praiseworthy and Glorious.\nO Allah, bless Muhammad and the family of Muhammad,\nas You blessed Ibrahim and the family of Ibrahim.\nIndeed, You are Praiseworthy and Glorious.\n\nPeace and mercy of Allah be upon you.',
-    instruction: 'In the final sitting, after the testification, recite the blessings upon the Prophet. Then turn your head to the right and say the closing greeting of peace, and turn to the left and repeat it. This ends the prayer.',
-    icon: '🕊️',
-    level: StepLevel.learning,
-    info:
-        'The blessings are asked upon the Prophet and his family, '
-        'mirroring those sent upon Ibrahim. The closing greeting then closes '
-        'the prayer by turning to each side with peace, which is also a '
-        'greeting to those praying beside you.',
+        'Turning to each side closes the prayer and greets those praying '
+        'beside you. Once the rest is settled, blessings upon the Prophet '
+        'are said in this final sitting before the greeting: "Allahumma '
+        'salli \'ala Muhammad wa \'ala ali Muhammad", asking blessings on '
+        'the Prophet and his family as they were sent upon Ibrahim.',
   ),
 ];
 
