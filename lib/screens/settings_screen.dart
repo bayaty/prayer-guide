@@ -5,6 +5,7 @@ import 'qibla_screen.dart';
 import '../services/update_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/collapsing_title.dart';
+import '../widgets/buy_me_a_coffee.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -159,6 +160,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                const BuyMeACoffee(),
+                if (BuyMeACoffee.isConfigured) const SizedBox(height: 16),
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
