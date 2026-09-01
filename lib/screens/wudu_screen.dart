@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../widgets/collapsing_title.dart';
 import '../widgets/info_section.dart';
 import '../widgets/practice_mode_toggle.dart';
 import '../widgets/step_icon.dart';
@@ -45,11 +46,13 @@ class WuduScreen extends StatelessWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: const Text(
-                'Wudu',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              title: const CollapsingTitle(
+                child: Text(
+                  'Wudu',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               background: Container(
@@ -60,7 +63,7 @@ class WuduScreen extends StatelessWidget {
                     colors: [AppColors.accent, AppColors.primary],
                   ),
                 ),
-                child: const Center(
+                child: const SafeArea(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

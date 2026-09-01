@@ -4,6 +4,7 @@ import '../data/app_settings.dart';
 import 'qibla_screen.dart';
 import '../services/update_service.dart';
 import '../theme/app_colors.dart';
+import '../widgets/collapsing_title.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -72,11 +73,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             pinned: true,
             backgroundColor: AppColors.primary,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
-                'Settings',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              title: const CollapsingTitle(
+                child: Text(
+                  'Settings',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               background: Container(

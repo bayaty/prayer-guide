@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Rebuild and deploy the web app after a push to main.
+#
+# Git has no post-push hook, so this runs at the end of pre-push: by then the
+# push has been authorised and the refs are known, and exiting non-zero here
+# would only block a push that is otherwise fine. So the deploy runs in the
+# background and never fails the push.
+#
+# Installed by scripts/install-hooks.sh. Skip once with:
+#   SKIP_WEB_DEPLOY=1 git push
+set -uo pipefail
+
+if [ "${SKIP_WEB_DEPLOY:-0}" = "1" ]; then
+  echo "[web] skipped (SKIP_WEB_DEPLOY=1)"
+  exit 0
+fi
+
+# Only deploy when main is actually part of this push.
+pushing_main=0
+while read -r local_ref _ _ _; do
+  case "$local_ref" in
+    refs/heads/main) pushing_main=1 ;;
+  esac
+done
+
+if [ "$pushing_main" != "1" ]; then
+  exit 0
+fi
+
+REPO="$(git rev-parse --show-toplevel)"
+LOG="$REPO/.git/web-deploy.log"
+
+# Flutter is not on PATH in a hook's environment.
+export PATH="$HOME/flutter/bin:$PATH"
+
+echo "[web] deploying in the background, log: $LOG"
+(
+  cd "$REPO" || exit 1
+  {
+    echo "=== $(date -Is) deploy triggered by push to main ==="
+    bash scripts/deploy-web.sh
+    echo "=== exit $? ==="
+  } >>"$LOG" 2>&1
+) </dev/null >/dev/null 2>&1 &
+
+exit 0

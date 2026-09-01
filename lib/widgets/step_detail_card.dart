@@ -64,12 +64,13 @@ class StepDetailCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (stepNumber != null) ...[
-                    _StepNumber(stepNumber!),
+                    Center(child: _StepNumber(stepNumber!)),
                     const SizedBox(height: 12),
                   ],
-                  StepIcon(step.icon, size: 56),
+                  Center(child: StepIcon(step.icon, size: 56)),
                   const SizedBox(height: 12),
                   Text(
                     step.title,

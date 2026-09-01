@@ -3,9 +3,9 @@
     "short_name": "Prayer Guide",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FCEFF7",
+    "theme_color": "#7B3F76",
+    "description": "Learn how to pray: a step by step guide to wudu and salah for new Muslims and reverts.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
