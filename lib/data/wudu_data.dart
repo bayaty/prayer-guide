@@ -47,25 +47,25 @@ class WuduStep {
 final List<WuduStep> wuduSteps = [
   const WuduStep(
     number: 1,
-    title: 'Intention (Niyyah)',
+    title: 'Intention',
     instruction:
-        'Make the intention in your heart to perform wudu for purification. '
+        'Make the intention in your heart to wash for purification. '
         'The intention is silent; it is not spoken aloud.',
     icon: '🤍',
+    level: StepLevel.sunnah,
     info:
-        'Niyyah is what separates an act of worship from an ordinary '
-        'wash. It is held in the heart, not spoken, and it is why wudu '
-        'performed with awareness carries reward. The Prophet said: '
-        '"Whoever performs wudu and perfects it, his sins leave his body, '
-        'even from under his fingernails." (Sahih Muslim 245)',
+        'The intention is what turns washing into an act of worship. It is '
+        'held in the heart, not spoken aloud. The Prophet said: "Whoever '
+        'washes for prayer and perfects it, his sins leave his body, even '
+        'from under his fingernails." (Sahih Muslim 245)',
   ),
   const WuduStep(
     number: 2,
-    title: 'Say Bismillah (In the name of God)',
+    title: 'Say In the Name of God',
     arabicText: 'بِسْمِ اللَّهِ',
     transliteration: 'Bismillah',
     translation: 'In the name of Allah',
-    instruction: 'Begin by saying "Bismillah", meaning "In the name of God".',
+    instruction: 'Begin by saying the words below, meaning "In the name of God".',
     icon: '🌸',
     level: StepLevel.sunnah,
     info:
@@ -89,7 +89,7 @@ final List<WuduStep> wuduSteps = [
   ),
   const WuduStep(
     number: 4,
-    title: 'Rinse the Mouth (Madmadah)',
+    title: 'Rinse the Mouth',
     instruction:
         'Take water into your mouth with the right hand, swill it around, '
         'and spit it out.',
@@ -103,7 +103,7 @@ final List<WuduStep> wuduSteps = [
   ),
   const WuduStep(
     number: 5,
-    title: 'Rinse the Nose (Istinshaq)',
+    title: 'Rinse the Nose',
     instruction:
         'Sniff water gently into the nostrils with the right hand, then blow '
         'it out using the left hand.',
@@ -118,43 +118,30 @@ final List<WuduStep> wuduSteps = [
   const WuduStep(
     number: 6,
     title: 'Wash the Face',
-    instruction:
-        'Wash the whole face, from the hairline to the chin, and from ear '
-        'to ear.',
+    instruction: 'Wash your face, from the hairline to the chin and from '
+        'ear to ear.',
     icon: '🌷',
-    info:
-        'The face is the part explicitly named first in the Quranic verse '
-        'on wudu (al-Ma\'idah 5:6). Its boundaries are defined precisely: '
-        'hairline to chin, ear to ear, so nothing is left unwashed.',
+    info: 'Named first in the verse on washing for prayer (Quran 5:6).',
     times: 3,
   ),
   const WuduStep(
     number: 7,
     title: 'Wash the Arms',
-    instruction:
-        'Wash each arm from the fingertips up to and including the elbow. '
-        'Begin with the right arm, then the left.',
+    instruction: 'Wash each arm up to and including the elbow.',
     icon: '🌿',
-    info:
-        'The Quran specifies washing to the elbows, and the elbows are '
-        'included rather than merely reached. Beginning with the right '
-        'again follows the Prophet\'s practice.',
+    info: 'The elbows are included, not just reached (Quran 5:6).',
     times: 3,
   ),
   const WuduStep(
     number: 8,
-    title: 'Wipe the Head (Masah)',
-    instruction:
-        'Take fresh water in your hands, then wipe over your head from the '
-        'front hairline to the back, and bring your hands forward again. '
-        'This is done once.',
+    title: 'Wipe the Head',
+    instruction: 'Take fresh water in your hands, then wipe over a quarter '
+        'of your head. Once is enough.',
     icon: '🌙',
-    info:
-        'The head is wiped, not washed, and only once. Abdullah bin Zaid, '
-        'describing how the Prophet performed wudu, put his hands in the '
-        'water before wiping his head (Sahih al-Bukhari 186), so fresh '
-        'water is taken rather than reusing what is left on the hands from '
-        'washing the arms.',
+    info: 'The head is wiped, not washed, and once is enough. A quarter of '
+        'the head is all that is required. Abdullah bin Zaid, describing '
+        'how the Prophet washed, put his hands in the water before wiping '
+        '(Sahih al-Bukhari 186).',
     times: 1,
   ),
   const WuduStep(
@@ -175,14 +162,9 @@ final List<WuduStep> wuduSteps = [
   const WuduStep(
     number: 10,
     title: 'Wash the Feet',
-    instruction:
-        'Wash each foot up to and including the ankles, beginning with the '
-        'right. Make sure the water reaches between the toes.',
+    instruction: 'Wash each foot up to and including the ankle.',
     icon: '🌺',
-    info:
-        'The feet complete the wudu, washed to and including the ankles. '
-        'The Prophet warned against leaving dry patches on the heels, so '
-        'water must reach every part, including between the toes.',
+    info: 'Leave no dry patches, especially on the heels.',
     times: 3,
   ),
 ];

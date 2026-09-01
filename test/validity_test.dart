@@ -28,7 +28,7 @@ void main() {
       PracticeMode.instance.filter<PrayerStep>(p.steps, (s) => s.level);
 
   group('bare-minimum wudu remains valid', () {
-    // The obligations named in Quran 5:6, plus the intention.
+    // The four obligations named in Quran 5:6.
     test('all four Quranic obligations survive', () {
       final titles = minimalWudu().map((s) => s.title).toList();
 
@@ -36,15 +36,18 @@ void main() {
           reason: 'washing the face is obligatory (Quran 5:6)');
       expect(titles, contains('Wash the Arms'),
           reason: 'washing the arms to the elbows is obligatory (Quran 5:6)');
-      expect(titles, contains('Wipe the Head (Masah)'),
+      expect(titles, contains('Wipe the Head'),
           reason: 'wiping the head is obligatory (Quran 5:6)');
       expect(titles, contains('Wash the Feet'),
           reason: 'washing the feet to the ankles is obligatory (Quran 5:6)');
     });
 
-    test('the intention survives', () {
-      expect(minimalWudu().any((s) => s.title.contains('Niyyah')), isTrue,
-          reason: 'wudu without intention is not an act of worship');
+    test('the intention is not required', () {
+      // Hanafi: the required acts are the four named in Quran 5:6. The
+      // intention is sunnah here, though it is fard in the Shafi'i school,
+      // so the card names the school rather than stating it universally.
+      expect(minimalWudu().any((s) => s.title == 'Intention'), isFalse,
+          reason: 'the Hanafi minimum is the four Quranic acts');
     });
 
     test('the obligations appear in the Quranic order', () {
@@ -52,7 +55,7 @@ void main() {
       final order = [
         titles.indexWhere((t) => t == 'Wash the Face'),
         titles.indexWhere((t) => t == 'Wash the Arms'),
-        titles.indexWhere((t) => t == 'Wipe the Head (Masah)'),
+        titles.indexWhere((t) => t == 'Wipe the Head'),
         titles.indexWhere((t) => t == 'Wash the Feet'),
       ];
       expect(order, orderedEquals([...order]..sort()),
@@ -74,7 +77,7 @@ void main() {
       const obligatory = [
         'Wash the Face',
         'Wash the Arms',
-        'Wipe the Head (Masah)',
+        'Wipe the Head',
         'Wash the Feet',
       ];
       for (final title in obligatory) {

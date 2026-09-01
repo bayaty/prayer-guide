@@ -35,12 +35,16 @@ void main() {
     final titles = minimal.map((s) => s.title).toList();
     expect(titles, contains('Wash the Face'));
     expect(titles, contains('Wash the Arms'));
-    expect(titles, contains('Wipe the Head (Masah)'));
+    expect(titles, contains('Wipe the Head'));
     expect(titles, contains('Wash the Feet'));
-    expect(titles.any((t) => t.contains('Niyyah')), isTrue);
+
+    // The intention is sunnah in the Hanafi school, so bare minimum drops
+    // it. It is fard in the Shafi'i school, which is why the card names
+    // the school rather than presenting this as universal.
+    expect(titles.any((t) => t == 'Intention'), isFalse);
 
     // Sunnah acts should be gone.
-    expect(titles, isNot(contains('Rinse the Mouth (Madmadah)')));
+    expect(titles, isNot(contains('Rinse the Mouth')));
     expect(titles, isNot(contains('Wipe the Ears')));
   });
 

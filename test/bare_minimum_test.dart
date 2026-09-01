@@ -30,13 +30,13 @@ void main() {
 
     test('steps already done once stay at once', () {
       final head =
-          wuduSteps.firstWhere((s) => s.title == 'Wipe the Head (Masah)');
+          wuduSteps.firstWhere((s) => s.title == 'Wipe the Head');
       expect(head.times, 1);
       expect(head.timesFor(extraSunnahs: false), 1);
     });
 
     test('uncounted steps stay uncounted', () {
-      final niyyah = wuduSteps.firstWhere((s) => s.title.contains('Niyyah'));
+      final niyyah = wuduSteps.firstWhere((s) => s.title == 'Intention');
       expect(niyyah.times, 0);
       expect(niyyah.timesFor(extraSunnahs: true), 0);
       expect(niyyah.timesFor(extraSunnahs: false), 0);

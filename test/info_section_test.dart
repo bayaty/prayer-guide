@@ -23,7 +23,7 @@ void main() {
   });
 
   test('the wudu hadith is present and correctly attributed', () {
-    final niyyah = wuduSteps.firstWhere((s) => s.title.contains('Niyyah'));
+    final niyyah = wuduSteps.firstWhere((s) => s.title == 'Intention');
     expect(niyyah.info, contains('perfects it'));
     expect(niyyah.info, contains('under his fingernails'));
     expect(niyyah.info, contains('Sahih Muslim 245'));
