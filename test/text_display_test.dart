@@ -191,7 +191,7 @@ void main() {
       expect(find.byType(Divider), findsNothing);
 
       // The step itself must still be usable.
-      expect(find.textContaining('Stand facing'), findsWidgets,
+      expect(find.textContaining('Stand upright'), findsWidgets,
           reason: 'the instruction text must survive');
     });
   });

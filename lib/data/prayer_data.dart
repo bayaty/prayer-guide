@@ -48,7 +48,7 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'اللَّهُ أَكْبَرُ',
     transliteration: 'Allahu Akbar',
     translation: 'Allah is the Greatest',
-    instruction: 'Stand facing Makkah. Raise your hands to your ears and say "Allahu Akbar" to begin the prayer.',
+    instruction: 'Stand upright facing Makkah. Raise your hands to your ears and say "Allahu Akbar".',
     icon: 'posture:standing',
     info:
         'Qiyam marks the moment you leave worldly matters behind and stand '
@@ -161,7 +161,7 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'رَبِّ اغْفِرْ لِي',
     transliteration: 'Rabbighfir lee',
     translation: 'My Lord, forgive me',
-    instruction: 'Rise from the prostration saying "Allahu Akbar" and sit briefly. Say this supplication.',
+    instruction: 'Say "Allahu Akbar" and sit up from the prostration. Say "Rabbighfir lee".',
     icon: 'posture:sitting',
     info:
         'This is the best moment for repentance. The supplication said '
@@ -197,7 +197,8 @@ PrayerStep _intention(String prayerName) => PrayerStep(
       instruction:
           'Decide in your heart that you are praying $prayerName. The '
           'intention is held in the heart and is not spoken aloud. Settle '
-          'it before you raise your hands to begin.',
+          'it before you raise your hands and say "Allahu Akbar", which '
+          'starts the prayer.',
       icon: '🤍',
       info:
           'The intention is what separates prayer from ordinary movement. '

@@ -81,6 +81,9 @@ void main() {
       for (final step in stepsOf('Fajr')) {
         final says = quoted(step.instruction).contains('Allahu Akbar');
         if (!says) continue;
+        // The intention is settled silently, so it carries no Arabic even
+        // though its wording names the phrase that starts the prayer.
+        if (step.title.startsWith('Intend to pray')) continue;
         // Steps whose own recitation differs (bowing, prostration) still
         // teach their glorification, so only check that Arabic is present.
         expect(step.arabicText, isNotEmpty, reason: step.title);
