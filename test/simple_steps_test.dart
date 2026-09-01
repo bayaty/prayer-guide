@@ -44,13 +44,13 @@ void main() {
       expect(last.instruction.toLowerCase(), contains('left'));
     });
 
-    test('the sitting is described by how long it lasts', () {
-      // Ten Takbirs is a rough length for an unhurried sitting, not a
-      // required recitation, so the wording must read as duration.
+    test('the sitting says the takbir ten times', () {
+      // Ten takbirs fills the sitting while the testification is still
+      // being learned. Stated plainly, with the explanation in the note.
       final sitting = stepsOf('Fajr').firstWhere(
         (s) => s.title.contains('(Final)') || s.title.contains('(Middle)'),
       );
-      expect(sitting.instruction.toLowerCase(), contains('as long as'));
+      expect(sitting.instruction, contains('"Allahu Akbar" 10 times'));
     });
   });
 
@@ -84,6 +84,8 @@ void main() {
         // The intention is settled silently, so it carries no Arabic even
         // though its wording names the phrase that starts the prayer.
         if (step.title.startsWith('Intend to pray')) continue;
+        // The sitting between prostrations is silent for a beginner.
+        if (step.title.startsWith('Sitting Between')) continue;
         // Steps whose own recitation differs (bowing, prostration) still
         // teach their glorification, so only check that Arabic is present.
         expect(step.arabicText, isNotEmpty, reason: step.title);

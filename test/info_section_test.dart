@@ -29,7 +29,7 @@ void main() {
     expect(niyyah.info, contains('Sahih Muslim 245'));
   });
 
-  test('sujud info points to dua, sitting points to repentance', () {
+  test('prostration info points to dua, sitting explains the pause', () {
     final steps = prayers.first.steps;
     final sujud = steps.firstWhere((s) => s.title.contains('First Prostration'));
     final between =
@@ -37,8 +37,10 @@ void main() {
 
     expect(sujud.info.toLowerCase(), contains('dua'));
     expect(sujud.info.toLowerCase(), contains('nearest'));
-    expect(between.info.toLowerCase(), contains('repentance'));
-    expect(between.info.toLowerCase(), contains('forgiveness'));
+    // The beginner sitting says nothing; its note explains the rest
+    // and records the words used once the prayer is settled.
+    expect(between.info.toLowerCase(), contains('rest'));
+    expect(between.info.toLowerCase(), contains('forgive me'));
   });
 
   test('info text contains no em dashes or smart quotes', () {

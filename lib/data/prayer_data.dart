@@ -116,10 +116,11 @@ final List<PrayerStep> _oneRakah = [
   ),
   const PrayerStep(
     title: 'Bowing',
-    arabicText: 'سُبْحَانَ رَبِّيَ الْعَظِيمِ',
-    transliteration: 'Subhana Rabbiyal Azeem',
-    translation: 'Glory be to my Lord, the Most Great',
-    instruction: 'Say "Allahu Akbar" and bow, placing your hands on your knees with your back straight. Say these words 3 times.',
+    arabicText: 'سُبْحَانَ اللَّهِ',
+    transliteration: 'Subhan Allah',
+    translation: 'Glory be to Allah',
+    instruction: 'Say "Allahu Akbar" and bow, placing your hands on your '
+        'knees with your back straight. Say "Subhan Allah" 3 times.',
     icon: 'posture:bowing',
     info:
         'Bowing is for glorifying Allah rather than asking. The Prophet '
@@ -144,10 +145,12 @@ final List<PrayerStep> _oneRakah = [
   ),
   const PrayerStep(
     title: 'First Prostration',
-    arabicText: 'سُبْحَانَ رَبِّيَ الْأَعْلَىٰ',
-    transliteration: 'Subhana Rabbiyal A\'la',
-    translation: 'Glory be to my Lord, the Most High',
-    instruction: 'Say "Allahu Akbar" and prostrate, with your forehead, nose, both palms, both knees and toes touching the ground. Say these words 3 times.',
+    arabicText: 'سُبْحَانَ اللَّهِ',
+    transliteration: 'Subhan Allah',
+    translation: 'Glory be to Allah',
+    instruction: 'Say "Allahu Akbar" and prostrate, with your forehead, '
+        'nose, both palms, both knees and toes touching the ground. Say '
+        '"Subhan Allah" 3 times.',
     icon: 'posture:prostrating',
     info:
         'This is the best place and time to make dua. The Prophet said '
@@ -158,23 +161,25 @@ final List<PrayerStep> _oneRakah = [
   ),
   const PrayerStep(
     title: 'Sitting Between Prostrations',
-    arabicText: 'رَبِّ اغْفِرْ لِي',
-    transliteration: 'Rabbighfir lee',
-    translation: 'My Lord, forgive me',
-    instruction: 'Say "Allahu Akbar" and sit up from the prostration. Say "Rabbighfir lee".',
+    arabicText: '',
+    transliteration: '',
+    translation: '',
+    instruction: 'Say "Allahu Akbar" and sit up from the prostration. Sit '
+        'still for a moment.',
     icon: 'posture:sitting',
     info:
-        'This is the best moment for repentance. The supplication said '
-        'here is a direct request for forgiveness, so bring to mind what '
-        'you want forgiven and ask sincerely. Do not rush the sitting; '
-        'stay still long enough to mean what you are saying.',
+        'This is a moment of rest between the two prostrations. Nothing has '
+        'to be said here while you are learning. Once the rest is settled, '
+        'the words said in this sitting are "Rabbighfir lee", meaning "My '
+        'Lord, forgive me".',
   ),
   const PrayerStep(
     title: 'Second Prostration',
-    arabicText: 'سُبْحَانَ رَبِّيَ الْأَعْلَىٰ',
-    transliteration: 'Subhana Rabbiyal A\'la',
-    translation: 'Glory be to my Lord, the Most High',
-    instruction: 'Say "Allahu Akbar" and prostrate again. Say these words 3 times. This completes one round.',
+    arabicText: 'سُبْحَانَ اللَّهِ',
+    transliteration: 'Subhan Allah',
+    translation: 'Glory be to Allah',
+    instruction: 'Say "Allahu Akbar" and prostrate again. Say "Subhan '
+        'Allah" 3 times. This completes one round.',
     icon: 'posture:prostrating',
     info:
         'Another opportunity for dua, and the same nearness applies. '
@@ -215,15 +220,13 @@ final List<PrayerStep> _tashahhud = [
     transliteration: 'Allahu Akbar',
     translation: 'Allah is the Greatest',
     instruction: 'Sit with your left foot under you and your right foot '
-        'upright. While you are still learning the testification, say '
-        '"Allahu Akbar" here, staying for about as long as it takes to say '
-        'it ten times so the sitting is not rushed.',
+        'upright. Say "Allahu Akbar" 10 times.',
     icon: 'posture:sitting',
     level: StepLevel.beginner,
     info:
-        'The sitting has its own length. Rather than rushing through it '
-        'while the longer words are still being learned, fill it with what '
-        'you already know and keep it unhurried.',
+        'While you are learning, filling the sitting with words you already '
+        'know keeps it unhurried. Once the rest is settled, this sitting is '
+        'where the testification is recited.',
   ),
   const PrayerStep(
     title: 'Sitting Testification',
