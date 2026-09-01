@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import '../data/active_prayer.dart';
 import '../data/azan_times.dart';
 import '../widgets/now_badge.dart';
-import '../data/app_settings.dart';
 import '../data/practice_mode.dart';
 import '../theme/app_colors.dart';
 import '../widgets/practice_mode_toggle.dart';
-import '../widgets/step_icon.dart';
 import '../widgets/step_detail_card.dart';
 import 'settings_screen.dart';
 import '../data/prayer_data.dart';
@@ -28,7 +26,6 @@ class PrayerScreen extends StatelessWidget {
   Widget _build(BuildContext context) {
     final visible = PracticeMode.instance
         .filter<PrayerStep>(prayer.steps, (s) => s.level);
-    final fullDetail = AppSettings.instance.fullDetail;
 
     return Scaffold(
       body: CustomScrollView(
@@ -189,7 +186,7 @@ class PrayerScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverToBoxAdapter(
               child: Text(
-                fullDetail ? 'All Steps' : 'Overview',
+                'All Steps',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -225,26 +222,19 @@ class PrayerScreen extends StatelessWidget {
                     );
                   }
 
-                  // In full-detail mode every step is laid out in one long
-                  // read, so a learner never has to tap through. The compact
-                  // tile stays for anyone who only wants the running order.
-                  if (fullDetail) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: StepDetailCard(
-                        step: step,
-                        stepNumber: index + 1,
-                        onTap: open,
-                        bottomPadding: 0,
-                        scrollable: false,
-                      ),
-                    );
-                  }
-
-                  return _StepPreviewTile(
-                    step: step,
-                    index: index,
-                    onTap: open,
+                  // Every step is laid out in one continuous read, so a
+                  // learner can follow the whole prayer by scrolling. Tapping
+                  // a card still opens the paged guide at that step for
+                  // anyone who would rather take it one at a time.
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: StepDetailCard(
+                      step: step,
+                      stepNumber: index + 1,
+                      onTap: open,
+                      bottomPadding: 0,
+                      scrollable: false,
+                    ),
                   );
                 },
                 childCount: visible.length,
@@ -253,55 +243,6 @@ class PrayerScreen extends StatelessWidget {
           ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 16)),
         ],
-      ),
-    );
-  }
-}
-
-class _StepPreviewTile extends StatelessWidget {
-  final PrayerStep step;
-  final int index;
-  final VoidCallback onTap;
-
-  const _StepPreviewTile({
-    required this.step,
-    required this.index,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        onTap: onTap,
-        leading: CircleAvatar(
-          backgroundColor: AppColors.accent.withAlpha(25),
-          child: Text(
-            '${index + 1}',
-            style: const TextStyle(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        title: Text(
-          step.title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-        ),
-        subtitle: AppSettings.instance.showTransliteration
-            ? Text(
-                step.transliteration.split('\n').first,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              )
-            : null,
-        trailing: StepIcon(step.icon, size: 26),
       ),
     );
   }
