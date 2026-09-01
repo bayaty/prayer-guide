@@ -89,8 +89,8 @@ jobs:
         # needs its own architecture, so the arm64 file is roughly a third of
         # the universal one and installs far more quickly.
         run: |
-          flutter build apk --release
-          flutter build apk --release --split-per-abi
+          flutter build apk --release --dart-define=COFFEE_LINK=https://buy.stripe.com/7sYaEZ91DeyB2cT371ao800
+          flutter build apk --release --split-per-abi --dart-define=COFFEE_LINK=https://buy.stripe.com/7sYaEZ91DeyB2cT371ao800
 
       - name: Verify the APK signature
         if: steps.check.outputs.exists == 'false'

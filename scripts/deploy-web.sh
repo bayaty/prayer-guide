@@ -18,7 +18,10 @@ REMOTE="${PRAYER_WEB_REMOTE:-beelink}"
 REMOTE_DIR="${PRAYER_WEB_DIR:-~/sites/prayerguide/app}"
 
 echo "==> building"
-flutter build web --release --base-href /app/
+# The coffee link is passed at build time so it is not committed in
+# the widget source. Override with COFFEE_LINK=... to test.
+COFFEE_LINK="${COFFEE_LINK:-https://buy.stripe.com/7sYaEZ91DeyB2cT371ao800}"
+flutter build web --release --base-href /app/ --dart-define=COFFEE_LINK="$COFFEE_LINK"
 
 cd build/web
 
