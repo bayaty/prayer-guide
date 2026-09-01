@@ -199,18 +199,8 @@ PrayerStep _intention(String prayerName) => PrayerStep(
       arabicText: '',
       transliteration: '',
       translation: '',
-      instruction:
-          'Decide in your heart that you are praying $prayerName. The '
-          'intention is held in the heart and is not spoken aloud. Settle '
-          'it before you raise your hands and say "Allahu Akbar", which '
-          'starts the prayer.',
+      instruction: '',
       icon: '🤍',
-      info:
-          'The intention is what separates prayer from ordinary movement. '
-          'The Prophet said that actions are judged by intentions, and that '
-          'each person receives what they intended. It costs no time: '
-          'simply know that you are standing for $prayerName before you '
-          'begin.',
     );
 
 final List<PrayerStep> _tashahhud = [

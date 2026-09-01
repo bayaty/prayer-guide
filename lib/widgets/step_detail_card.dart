@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../data/app_settings.dart';
 import '../data/prayer_data.dart';
 import '../theme/app_colors.dart';
-import 'info_section.dart';
 import 'step_icon.dart';
 
 /// One prayer step shown in full: icon, title, instruction, and whichever of
@@ -81,30 +80,28 @@ class StepDetailCard extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 16),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.tintBg,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppColors.softPink,
+                  if (step.instruction.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.tintBg,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppColors.softPink,
+                        ),
+                      ),
+                      child: Text(
+                        step.instruction,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[800],
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    child: Text(
-                      step.instruction,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[800],
-                        height: 1.5,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  if (step.info.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    InfoSection(step.info),
                   ],
                 ],
               ),

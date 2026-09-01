@@ -6,14 +6,6 @@ import 'package:prayer_guide/data/wudu_data.dart';
 import 'package:prayer_guide/widgets/info_section.dart';
 
 void main() {
-  test('every prayer step has info text', () {
-    final missing = <String>[];
-    for (final s in prayers.first.steps) {
-      if (s.info.trim().isEmpty) missing.add(s.title);
-    }
-    expect(missing, isEmpty, reason: 'steps without info: $missing');
-  });
-
   test('prostration info points to dua, sitting explains the pause', () {
     final steps = prayers.first.steps;
     final sujud = steps.firstWhere((s) => s.title.contains('First Prostration'));

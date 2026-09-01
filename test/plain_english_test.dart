@@ -86,8 +86,8 @@ void main() {
     test('every prayer opens by naming itself', () {
       for (final prayer in prayers) {
         final first = prayer.steps.first;
+        // The card is a bare title, so the title is what must name it.
         expect(first.title, 'Intend to pray ${prayer.name}');
-        expect(first.instruction, contains(prayer.name));
       }
     });
 

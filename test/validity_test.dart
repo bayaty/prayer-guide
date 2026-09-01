@@ -105,8 +105,9 @@ void main() {
         // not just "make the intention".
         expect(steps.first.title, 'Intend to pray ${p.name}',
             reason: '${p.name} must begin by naming its own intention');
-        expect(steps.first.instruction, contains(p.name),
-            reason: '${p.name} intention must name the prayer');
+        // The intention carries no body text; its title names the prayer.
+        expect(steps.first.instruction, isEmpty,
+            reason: '${p.name} intention should be a bare title');
       }
     });
 

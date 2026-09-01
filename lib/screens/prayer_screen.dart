@@ -148,7 +148,7 @@ class PrayerScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        '${prayer.rakatCount} Rak\'ahs · ${prayer.steps.length} Steps',
+                        '${prayer.rakatCount} Rounds · ${prayer.steps.length} Steps',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
