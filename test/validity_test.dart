@@ -89,13 +89,15 @@ void main() {
   });
 
   group('bare-minimum prayer remains valid', () {
-    test('the intention is present and is never filtered', () {
+    test('the intention is present, first, and names the prayer', () {
       for (final p in prayers) {
         final steps = minimalPrayer(p);
-        expect(steps.any((s) => s.title.contains('Niyyah')), isTrue,
-            reason: '${p.name} must include the intention');
-        expect(steps.first.title, contains('Niyyah'),
-            reason: '${p.name} must begin with the intention');
+        // The first card a learner sees must say which prayer to intend,
+        // not just "make the intention".
+        expect(steps.first.title, 'Intend to pray ${p.name}',
+            reason: '${p.name} must begin by naming its own intention');
+        expect(steps.first.instruction, contains(p.name),
+            reason: '${p.name} intention must name the prayer');
       }
     });
 
@@ -103,15 +105,15 @@ void main() {
       // The arkan: intention, standing, al-Fatiha, bowing, rising,
       // prostrating, sitting between, final sitting, and the closing peace.
       const pillars = [
-        'Niyyah',
-        'Standing (Qiyam)',
-        'Recite Al-Fatiha',
-        'Bowing (Ruku)',
+        'Intend to pray',
+        'Standing',
+        'Recite the Opening Chapter',
+        'Bowing',
         'Rising from Bowing',
-        'Prostration (Sujud)',
+        'Prostration',
         'Sitting Between Prostrations',
-        'Testification (Tashahhud)',
-        'Tasleem',
+        'Sitting Testification',
+        'Blessings and Closing Peace',
       ];
 
       for (final p in prayers) {
@@ -128,7 +130,7 @@ void main() {
         final steps = minimalPrayer(p);
         // Al-Fatiha is recited once per round, so counting it counts rounds.
         final fatiha =
-            steps.where((s) => s.title.contains('Recite Al-Fatiha')).length;
+            steps.where((s) => s.title.contains('Recite the Opening Chapter')).length;
         expect(fatiha, p.rakatCount,
             reason: '${p.name} should have ${p.rakatCount} rounds, '
                 'found $fatiha');
@@ -150,14 +152,15 @@ void main() {
 
     test('each prayer still ends with the closing peace', () {
       for (final p in prayers) {
-        expect(minimalPrayer(p).last.title, contains('Tasleem'),
-            reason: '${p.name} must end with the Tasleem');
+        expect(minimalPrayer(p).last.title,
+            contains('Blessings and Closing Peace'),
+            reason: '${p.name} must end with the closing greeting');
       }
     });
 
     test('only recommended additions were removed', () {
       // Anything dropped must be a sunnah, never a pillar.
-      const removable = ['Opening Supplication', 'Short Surah'];
+      const removable = ['Opening Supplication', 'Short Chapter'];
 
       for (final p in prayers) {
         final full = p.steps.map((s) => s.title).toSet();

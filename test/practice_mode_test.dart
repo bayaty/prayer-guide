@@ -59,14 +59,14 @@ void main() {
     expect(minimal.length, lessThan(fajr.steps.length));
 
     // Pillars remain.
-    expect(titles.any((t) => t.contains('Recite Al-Fatiha')), isTrue);
-    expect(titles.any((t) => t.contains('Bowing (Ruku)')), isTrue);
+    expect(titles.any((t) => t.contains('Recite the Opening Chapter')), isTrue);
+    expect(titles.any((t) => t.contains('Bowing')), isTrue);
     expect(titles.any((t) => t.contains('Prostration')), isTrue);
-    expect(titles.any((t) => t.contains('Tashahhud')), isTrue);
+    expect(titles.any((t) => t.contains('Sitting Testification')), isTrue);
 
     // Sunnah additions are dropped.
     expect(titles.any((t) => t.contains('Opening Supplication')), isFalse);
-    expect(titles.any((t) => t.contains('Short Surah')), isFalse);
+    expect(titles.any((t) => t.contains('Short Chapter')), isFalse);
   });
 
   test('every prayer keeps its pillars in bare-minimum mode', () {
@@ -75,10 +75,10 @@ void main() {
       final minimal =
           PracticeMode.instance.filter<PrayerStep>(p.steps, (s) => s.level);
       expect(minimal, isNotEmpty, reason: '${p.name} lost every step');
-      expect(minimal.any((s) => s.title.contains('Recite Al-Fatiha')), isTrue,
+      expect(minimal.any((s) => s.title.contains('Recite the Opening Chapter')), isTrue,
           reason: '${p.name} lost al-Fatiha');
-      expect(minimal.last.title, contains('Tasleem'),
-          reason: '${p.name} must still end with the Tasleem');
+      expect(minimal.last.title, contains('Blessings and Closing Peace'),
+          reason: '${p.name} must still end with the closing greeting');
     }
   });
 

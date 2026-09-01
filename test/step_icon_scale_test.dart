@@ -38,7 +38,7 @@ void main() {
               children: [
                 const StepIcon('posture:prostrating', size: 56),
                 const SizedBox(width: 8),
-                Expanded(child: Text('Second Prostration (Sujud)')),
+                Expanded(child: Text('Second Prostration')),
               ],
             ),
           ),

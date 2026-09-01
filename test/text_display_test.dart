@@ -155,7 +155,7 @@ void main() {
       // The prayer opens on the intention, which carries no Arabic,
       // transliteration or translation. None of the headings belong there.
       final intention =
-          prayers.first.steps.firstWhere((s) => s.title.contains('Niyyah'));
+          prayers.first.steps.firstWhere((s) => s.title.startsWith('Intend to pray'));
       expect(intention.arabicText.trim(), isEmpty);
       expect(intention.translation.trim(), isEmpty);
 
