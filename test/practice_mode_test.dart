@@ -17,7 +17,7 @@ void main() {
     expect(mode.title, 'Complete Steps');
 
     mode.extraSunnahs = false;
-    expect(mode.title, 'Bare Minimum');
+    expect(mode.title, 'Starting Out');
   });
 
   test('bare minimum removes sunnah wudu steps', () {
@@ -48,7 +48,7 @@ void main() {
     expect(titles, isNot(contains('Wipe the Ears')));
   });
 
-  test('bare minimum removes sunnah prayer steps but keeps the pillars', () {
+  test('starting out simplifies the wording but keeps every posture', () {
     final mode = PracticeMode.instance;
     final fajr = prayers.first;
 
@@ -58,26 +58,33 @@ void main() {
 
     expect(minimal.length, lessThan(fajr.steps.length));
 
-    // Pillars remain.
-    expect(titles.any((t) => t.contains('Recite the Opening Chapter')), isTrue);
+    // Every posture remains; only the words change.
     expect(titles.any((t) => t.contains('Bowing')), isTrue);
     expect(titles.any((t) => t.contains('Prostration')), isTrue);
-    expect(titles.any((t) => t.contains('Sitting Testification')), isTrue);
 
-    // Sunnah additions are dropped.
+    // The full Arabic is replaced by the simplified stand-ins.
+    expect(titles.any((t) => t.contains('Recite the Opening Chapter')), isFalse,
+        reason: 'the full chapter belongs to complete mode');
+    expect(titles.any((t) => t.contains('Praise Allah')), isTrue,
+        reason: 'a beginner still recites something while standing');
+    expect(titles.any((t) => t.contains('Sitting Testification')), isFalse);
+    expect(titles.any((t) => t.startsWith('Sitting (')), isTrue,
+        reason: 'the sitting is occupied with takbir instead');
+
+    // Sunnah additions are dropped in both cases.
     expect(titles.any((t) => t.contains('Opening Supplication')), isFalse);
     expect(titles.any((t) => t.contains('Short Chapter')), isFalse);
   });
 
-  test('every prayer keeps its pillars in bare-minimum mode', () {
+  test('every prayer keeps a standing recitation in starting-out mode', () {
     PracticeMode.instance.extraSunnahs = false;
     for (final p in prayers) {
       final minimal =
           PracticeMode.instance.filter<PrayerStep>(p.steps, (s) => s.level);
       expect(minimal, isNotEmpty, reason: '${p.name} lost every step');
-      expect(minimal.any((s) => s.title.contains('Recite the Opening Chapter')), isTrue,
-          reason: '${p.name} lost al-Fatiha');
-      expect(minimal.last.title, contains('Blessings and Closing Peace'),
+      expect(minimal.any((s) => s.title.contains('Praise Allah')), isTrue,
+          reason: '${p.name} has nothing to recite while standing');
+      expect(minimal.last.title, contains('Closing Peace'),
           reason: '${p.name} must still end with the closing greeting');
     }
   });
@@ -97,7 +104,7 @@ void main() {
     await tester.tap(find.byType(Switch));
     await tester.pumpAndSettle();
 
-    expect(find.text('Bare Minimum'), findsOneWidget);
+    expect(find.text('Starting Out'), findsOneWidget);
     expect(find.text('Complete Steps'), findsNothing);
   });
 

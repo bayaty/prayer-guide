@@ -71,12 +71,28 @@ final List<PrayerStep> _oneRakah = [
         'attention from the rush of daily life into the prayer.',
   ),
   const PrayerStep(
+    title: 'Praise Allah',
+    arabicText: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',
+    transliteration: 'Alhamdu lillahi Rabbil \'aalameen',
+    translation: 'All praise is due to Allah, Lord of all the worlds',
+    instruction: 'While standing, say this line. It is the opening praise of Al-Fatiha, and enough to keep you going while you learn the full chapter.',
+    icon: '📖',
+    level: StepLevel.beginner,
+    info:
+        'A starting point, not the finished prayer. Al-Fatiha is required in '
+        'every round, and a man who could not recite it was taught shorter '
+        'words of praise to say until he learned. Use this line the same '
+        'way: say it now, learn the full chapter, then switch to Complete '
+        'Steps. Do not stay here longer than you need to.',
+  ),
+  const PrayerStep(
     title: 'Recite the Opening Chapter',
     arabicText: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nالرَّحْمَٰنِ الرَّحِيمِ\nمَالِكِ يَوْمِ الدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nاهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ\nصِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',
     transliteration: 'Bismillahir Rahmanir Raheem\nAlhamdu lillahi Rabbil \'aalameen\nAr-Rahmanir Raheem\nMaaliki yawmid-deen\nIyyaka na\'budu wa iyyaka nasta\'een\nIhdinas-siratal mustaqeem\nSiratal-lazeena an\'amta \'alaihim ghairil maghdoobi \'alaihim walad-daalleen',
     translation: 'In the name of Allah, the Most Gracious, the Most Merciful.\nAll praise is due to Allah, Lord of all the worlds.\nThe Most Gracious, the Most Merciful.\nMaster of the Day of Judgment.\nYou alone we worship, and You alone we ask for help.\nGuide us on the Straight Path.\nThe path of those who have received Your grace; not the path of those who have brought down wrath upon themselves, nor of those who have gone astray.',
     instruction: 'Recite the opening chapter of the Quran, Al-Fatiha. This is required in every round of the prayer. Say "Ameen" at the end.',
     icon: '📖',
+    level: StepLevel.learning,
     info:
         'The Opening is recited in every round, which is why it is called '
         'the Opening. A hadith qudsi describes it as a conversation, with '
@@ -191,12 +207,28 @@ PrayerStep _intention(String prayerName) => PrayerStep(
 
 final List<PrayerStep> _tashahhud = [
   const PrayerStep(
+    title: 'Sitting',
+    arabicText: 'اللَّهُ أَكْبَرُ',
+    transliteration: 'Allahu Akbar',
+    translation: 'Allah is the Greatest',
+    instruction: 'Sit with your left foot under you and right foot upright. While you are still learning the testification, say "Allahu Akbar" about ten times here, unhurried.',
+    icon: 'posture:sitting',
+    level: StepLevel.beginner,
+    info:
+        'A stand-in while you memorise the testification, which is the '
+        'wording said in this sitting. Saying Allahu Akbar keeps the '
+        'sitting occupied with remembrance instead of silence, so the shape '
+        'of the prayer is learned first and the words are added as they '
+        'come. Move to Complete Steps once you know the testification.',
+  ),
+  const PrayerStep(
     title: 'Sitting Testification',
     arabicText: 'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ\nالسَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ\nالسَّلَامُ عَلَيْنَا وَعَلَىٰ عِبَادِ اللَّهِ الصَّالِحِينَ\nأَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ',
     transliteration: 'At-tahiyyatu lillahi was-salawatu wat-tayyibat\nAs-salamu \'alaika ayyuhan-Nabiyyu wa rahmatullahi wa barakatuh\nAs-salamu \'alaina wa \'ala \'ibadillahis-saliheen\nAsh-hadu an la ilaha illallah wa ash-hadu anna Muhammadan \'abduhu wa rasuluh',
     translation: 'All greetings, prayers, and good things are for Allah.\nPeace be upon you, O Prophet, and the mercy of Allah and His blessings.\nPeace be upon us and upon the righteous servants of Allah.\nI bear witness that there is no god but Allah, and I bear witness that Muhammad is His servant and messenger.',
     instruction: 'Sit with your left foot under you and right foot upright. Point your right index finger. Recite the words below.',
     icon: 'posture:sitting',
+    level: StepLevel.learning,
     info:
         'Before the closing greeting there is another chance to make dua '
         '(personal supplication), and '
@@ -209,12 +241,28 @@ final List<PrayerStep> _tashahhud = [
 
 final List<PrayerStep> _closing = [
   const PrayerStep(
+    title: 'Closing Peace',
+    arabicText: 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ',
+    transliteration: 'As-salamu alaikum wa rahmatullah',
+    translation: 'Peace and mercy of Allah be upon you',
+    instruction: 'Turn your head to the right and say it, then turn to the left and say it again. This ends the prayer.',
+    icon: '🕊️',
+    level: StepLevel.beginner,
+    info:
+        'This ends the prayer, and it is the one part to say in full from '
+        'the very beginning: it is short, and it is what actually closes '
+        'the prayer. Turning to each side greets the angels and anyone '
+        'praying beside you. The blessings upon the Prophet come just '
+        'before this once you have learned them.',
+  ),
+  const PrayerStep(
     title: 'Blessings and Closing Peace',
     arabicText: 'اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ\nكَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ\nإِنَّكَ حَمِيدٌ مَجِيدٌ\nاللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ\nكَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ\nإِنَّكَ حَمِيدٌ مَجِيدٌ\n\nالسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ',
     transliteration: 'Allahumma salli \'ala Muhammad wa \'ala ali Muhammad\nKama sallaita \'ala Ibrahim wa \'ala ali Ibrahim\nInnaka Hameedun Majeed\nAllahumma barik \'ala Muhammad wa \'ala ali Muhammad\nKama barakta \'ala Ibrahim wa \'ala ali Ibrahim\nInnaka Hameedun Majeed\n\nAssalamu alaikum wa rahmatullah',
     translation: 'O Allah, send prayers upon Muhammad and upon the family of Muhammad,\nas You sent prayers upon Ibrahim and the family of Ibrahim.\nIndeed, You are Praiseworthy and Glorious.\nO Allah, bless Muhammad and the family of Muhammad,\nas You blessed Ibrahim and the family of Ibrahim.\nIndeed, You are Praiseworthy and Glorious.\n\nPeace and mercy of Allah be upon you.',
     instruction: 'In the final sitting, after the testification, recite the blessings upon the Prophet. Then turn your head to the right and say the closing greeting of peace, and turn to the left and repeat it. This ends the prayer.',
     icon: '🕊️',
+    level: StepLevel.learning,
     info:
         'The blessings are asked upon the Prophet and his family, '
         'mirroring those sent upon Ibrahim. The closing greeting then closes '
@@ -232,13 +280,19 @@ List<PrayerStep> _buildSteps(String prayerName, int rakatCount) {
 
   for (int i = 1; i <= rakatCount; i++) {
     final rakahSteps = List<PrayerStep>.from(_oneRakah);
+
+    // Removal is by title rather than index. These were positional
+    // (removeAt(3), removeAt(1)) until a step was inserted above them, at
+    // which point removeAt(3) silently deleted Al-Fatiha, which is required
+    // in every round, instead of the optional short chapter. Titles cannot
+    // shift when the list is edited.
     if (i > 2) {
-      // 3rd and 4th rak'ah: only Al-Fatiha, no extra surah
-      rakahSteps.removeAt(3);
+      // 3rd and 4th rak'ah: only Al-Fatiha, no extra surah.
+      rakahSteps.removeWhere((s) => s.title == 'Recite a Short Chapter');
     }
     if (i > 1) {
-      // Opening supplication only in first rak'ah
-      rakahSteps.removeAt(1);
+      // Opening supplication only in the first rak'ah.
+      rakahSteps.removeWhere((s) => s.title == 'Opening Supplication');
     }
 
     for (final step in rakahSteps) {

@@ -6,10 +6,14 @@ import 'package:prayer_guide/data/practice_mode.dart';
 import 'package:prayer_guide/data/prayer_data.dart';
 import 'package:prayer_guide/data/wudu_data.dart';
 
-/// Guards the promise made by bare-minimum mode: following only the steps it
-/// shows must still produce a valid wudu and a valid prayer.
+/// Guards the promise made by the two modes.
 ///
-/// If a step is ever reclassified as sunnah by mistake, these fail.
+/// Complete mode must contain every pillar of the prayer. Starting-out mode
+/// makes a weaker, deliberate promise: it teaches the shape of the prayer with
+/// simplified wording while the Arabic is being learned, so the pillar
+/// POSITIONS must all still be there even where the words are stand-ins.
+///
+/// If a step is ever reclassified by mistake, these fail.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -26,6 +30,11 @@ void main() {
 
   List<PrayerStep> minimalPrayer(Prayer p) =>
       PracticeMode.instance.filter<PrayerStep>(p.steps, (s) => s.level);
+
+  /// The full practice, as taught once the learner is ready.
+  List<PrayerStep> completePrayer(Prayer p) => p.steps
+      .where((s) => s.level != StepLevel.beginner)
+      .toList();
 
   group('bare-minimum wudu remains valid', () {
     // The four obligations named in Quran 5:6.
@@ -101,7 +110,7 @@ void main() {
       }
     });
 
-    test('every pillar survives in every prayer', () {
+    test('every pillar survives in complete mode', () {
       // The arkan: intention, standing, al-Fatiha, bowing, rising,
       // prostrating, sitting between, final sitting, and the closing peace.
       const pillars = [
@@ -117,7 +126,7 @@ void main() {
       ];
 
       for (final p in prayers) {
-        final titles = minimalPrayer(p).map((s) => s.title).toList();
+        final titles = completePrayer(p).map((s) => s.title).toList();
         for (final pillar in pillars) {
           expect(titles.any((t) => t.contains(pillar)), isTrue,
               reason: '${p.name} is missing the pillar: $pillar');
@@ -125,15 +134,73 @@ void main() {
       }
     });
 
-    test('each prayer keeps its full count of rounds', () {
+    test('starting out keeps every pillar POSITION', () {
+      // The words may be simplified, but no posture or moment may vanish:
+      // someone following this mode still performs the whole prayer, and
+      // learns the wording as they go.
+      const positions = [
+        'Intend to pray',
+        'Standing',
+        'Bowing',
+        'Rising from Bowing',
+        'Prostration',
+        'Sitting Between Prostrations',
+      ];
+
+      for (final p in prayers) {
+        final titles = minimalPrayer(p).map((s) => s.title).toList();
+        for (final position in positions) {
+          expect(titles.any((t) => t.contains(position)), isTrue,
+              reason: '${p.name} lost the position: $position');
+        }
+      }
+    });
+
+    test('starting out still stands, recites, sits and closes', () {
       for (final p in prayers) {
         final steps = minimalPrayer(p);
-        // Al-Fatiha is recited once per round, so counting it counts rounds.
-        final fatiha =
-            steps.where((s) => s.title.contains('Recite the Opening Chapter')).length;
-        expect(fatiha, p.rakatCount,
-            reason: '${p.name} should have ${p.rakatCount} rounds, '
-                'found $fatiha');
+
+        // Something is recited while standing, even if it is the short
+        // praise rather than the full chapter.
+        expect(
+          steps.any((s) => s.title.contains('Praise Allah')),
+          isTrue,
+          reason: '${p.name} leaves the standing recitation empty',
+        );
+
+        // The sittings are occupied, even if with takbir.
+        expect(
+          steps.any((s) => s.title.startsWith('Sitting (')),
+          isTrue,
+          reason: '${p.name} has an empty sitting',
+        );
+
+        // And the prayer is actually closed.
+        expect(
+          steps.last.transliteration,
+          contains('salamu alaikum'),
+          reason: '${p.name} does not end with the closing peace',
+        );
+      }
+    });
+
+    test('each prayer keeps its full count of rounds', () {
+      for (final p in prayers) {
+        // Rounds are counted by the standing recitation, which in complete
+        // mode is Al-Fatiha and in starting-out mode is the praise line.
+        final complete = completePrayer(p)
+            .where((s) => s.title.contains('Recite the Opening Chapter'))
+            .length;
+        expect(complete, p.rakatCount,
+            reason: '${p.name} should have ${p.rakatCount} rounds in '
+                'complete mode, found $complete');
+
+        final minimal = minimalPrayer(p)
+            .where((s) => s.title.contains('Praise Allah'))
+            .length;
+        expect(minimal, p.rakatCount,
+            reason: '${p.name} should have ${p.rakatCount} rounds in '
+                'starting-out mode, found $minimal');
       }
     });
 
@@ -152,15 +219,27 @@ void main() {
 
     test('each prayer still ends with the closing peace', () {
       for (final p in prayers) {
-        expect(minimalPrayer(p).last.title,
-            contains('Blessings and Closing Peace'),
+        // Both modes end with the salam; only the wording before it differs.
+        expect(minimalPrayer(p).last.title, contains('Closing Peace'),
             reason: '${p.name} must end with the closing greeting');
+        expect(completePrayer(p).last.title,
+            contains('Blessings and Closing Peace'),
+            reason: '${p.name} must end with the blessings and greeting');
       }
     });
 
-    test('only recommended additions were removed', () {
-      // Anything dropped must be a sunnah, never a pillar.
-      const removable = ['Opening Supplication', 'Short Chapter'];
+    test('only recommended additions and stand-ins were removed', () {
+      // Anything dropped in starting-out mode must be either a sunnah or the
+      // fuller wording a stand-in replaces. A pillar POSITION disappearing
+      // would mean the mode teaches an incomplete prayer.
+      const removable = [
+        'Opening Supplication',
+        'Short Chapter',
+        // Replaced by the simplified stand-ins, not dropped outright.
+        'Recite the Opening Chapter',
+        'Sitting Testification',
+        'Blessings and Closing Peace',
+      ];
 
       for (final p in prayers) {
         final full = p.steps.map((s) => s.title).toSet();
@@ -169,9 +248,31 @@ void main() {
 
         for (final title in dropped) {
           expect(removable.any((r) => title.contains(r)), isTrue,
-              reason: '${p.name} dropped "$title", which is not a '
-                  'recommended addition');
+              reason: '${p.name} dropped "$title", which is neither a '
+                  'recommended addition nor a step with a stand-in');
         }
+      }
+    });
+
+    test('every dropped pillar has a stand-in taking its place', () {
+      // The counterpart to the test above: it is not enough that a pillar was
+      // removed for a defensible reason, something must replace it.
+      for (final p in prayers) {
+        final minimal = minimalPrayer(p);
+        final replaced = {
+          'Recite the Opening Chapter': 'Praise Allah',
+          'Sitting Testification': 'Sitting (',
+          'Blessings and Closing Peace': 'Closing Peace',
+        };
+
+        replaced.forEach((removed, standIn) {
+          final hasRemoved =
+              minimal.any((s) => s.title.contains(removed));
+          final hasStandIn =
+              minimal.any((s) => s.title.contains(standIn));
+          expect(hasRemoved || hasStandIn, isTrue,
+              reason: '${p.name}: "$removed" is gone with no stand-in');
+        });
       }
     });
   });
