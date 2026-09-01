@@ -189,15 +189,17 @@ class _WuduCard extends StatelessWidget {
               ),
             ],
 
-            const SizedBox(height: 12),
-            Text(
-              step.instruction,
-              style: TextStyle(
-                fontSize: 14,
-                height: 1.5,
-                color: Colors.grey[800],
+            if (step.instruction.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Text(
+                step.instruction,
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: Colors.grey[800],
+                ),
               ),
-            ),
+            ],
 
             if (step.info.isNotEmpty) InfoSection(step.info),
 

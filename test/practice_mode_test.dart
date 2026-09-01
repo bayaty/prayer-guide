@@ -34,9 +34,9 @@ void main() {
     // The four Quranic obligations must survive.
     final titles = minimal.map((s) => s.title).toList();
     expect(titles, contains('Wash the Face'));
-    expect(titles, contains('Wash the Arms'));
+    expect(titles, contains('Wash the Arms (include elbows)'));
     expect(titles, contains('Wipe the Head'));
-    expect(titles, contains('Wash the Feet'));
+    expect(titles, contains('Wash the Feet (include ankles)'));
 
     // The intention is sunnah in the Hanafi school, so bare minimum drops
     // it. It is fard in the Shafi'i school, which is why the card names

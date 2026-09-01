@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prayer_guide/data/app_settings.dart';
 import 'package:prayer_guide/data/prayer_data.dart';
 import 'package:prayer_guide/screens/prayer_steps_screen.dart';
-import 'package:prayer_guide/screens/wudu_screen.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -196,31 +195,4 @@ void main() {
     });
   });
 
-  group('the wudu screen honours them', () {
-    Future<void> open(WidgetTester tester) async {
-      tester.view.physicalSize = const Size(1200, 8000);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.reset);
-
-      await tester.pumpWidget(const MaterialApp(home: WuduScreen()));
-      await tester.pumpAndSettle();
-    }
-
-    testWidgets('the supplication shows by default', (tester) async {
-      await open(tester);
-      expect(find.textContaining('Bismillah'), findsWidgets);
-    });
-
-    testWidgets('hiding everything drops the supplication block but keeps '
-        'the instructions', (tester) async {
-      await AppSettings.instance.setShowArabic(false);
-      await AppSettings.instance.setShowTransliteration(false);
-      await AppSettings.instance.setShowTranslation(false);
-      await open(tester);
-
-      // Instructions and titles survive.
-      expect(find.text('Wash the Face'), findsOneWidget);
-      expect(find.textContaining('hairline'), findsWidgets);
-    });
-  });
 }

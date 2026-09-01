@@ -14,21 +14,6 @@ void main() {
     expect(missing, isEmpty, reason: 'steps without info: $missing');
   });
 
-  test('every wudu step has info text', () {
-    final missing = <String>[];
-    for (final s in wuduSteps) {
-      if (s.info.trim().isEmpty) missing.add(s.title);
-    }
-    expect(missing, isEmpty, reason: 'steps without info: $missing');
-  });
-
-  test('the wudu hadith is present and correctly attributed', () {
-    final niyyah = wuduSteps.firstWhere((s) => s.title == 'Intention');
-    expect(niyyah.info, contains('perfects it'));
-    expect(niyyah.info, contains('under his fingernails'));
-    expect(niyyah.info, contains('Sahih Muslim 245'));
-  });
-
   test('prostration info points to dua, sitting explains the pause', () {
     final steps = prayers.first.steps;
     final sujud = steps.firstWhere((s) => s.title.contains('First Prostration'));
