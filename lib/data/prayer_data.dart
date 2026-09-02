@@ -48,7 +48,7 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'اللَّهُ أَكْبَرُ',
     transliteration: 'Allahu Akbar',
     translation: 'Allah is the Greatest',
-    instruction: 'Stand upright facing Makkah. Raise your hands to your ears and say "Allahu Akbar".',
+    instruction: 'Stand upright facing Makkah. Raise your hands to your shoulders and say the line:',
     icon: 'posture:standing',
     info:
         'Qiyam marks the moment you leave worldly matters behind and stand '
@@ -62,7 +62,8 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبَارَكَ اسْمُكَ، وَتَعَالَىٰ جَدُّكَ، وَلَا إِلَٰهَ غَيْرُكَ',
     transliteration: 'Subhanaka Allahumma wa bihamdika, wa tabarakasmuka, wa ta\'ala jadduka, wa la ilaha ghairuk',
     translation: 'Glory be to You O Allah, and praise be to You. Blessed is Your name, exalted is Your majesty, and there is no god but You.',
-    instruction: 'Place your right hand over your left on your chest. Recite the opening supplication silently.',
+    instruction: 'Place your right hand over your left on your chest. '
+        'Recite silently:',
     icon: 'posture:hands',
     level: StepLevel.sunnah,
     info:
@@ -75,7 +76,7 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',
     transliteration: 'Alhamdu lillahi Rabbil \'aalameen',
     translation: 'All praise is due to Allah, Lord of all the worlds',
-    instruction: 'While standing, say this line. It is the opening praise of Al-Fatiha, and enough to keep you going while you learn the full chapter.',
+    instruction: 'While standing, recite this:',
     icon: '📖',
     level: StepLevel.beginner,
     info:
@@ -90,7 +91,8 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nالرَّحْمَٰنِ الرَّحِيمِ\nمَالِكِ يَوْمِ الدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nاهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ\nصِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',
     transliteration: 'Bismillahir Rahmanir Raheem\nAlhamdu lillahi Rabbil \'aalameen\nAr-Rahmanir Raheem\nMaaliki yawmid-deen\nIyyaka na\'budu wa iyyaka nasta\'een\nIhdinas-siratal mustaqeem\nSiratal-lazeena an\'amta \'alaihim ghairil maghdoobi \'alaihim walad-daalleen',
     translation: 'In the name of Allah, the Most Gracious, the Most Merciful.\nAll praise is due to Allah, Lord of all the worlds.\nThe Most Gracious, the Most Merciful.\nMaster of the Day of Judgment.\nYou alone we worship, and You alone we ask for help.\nGuide us on the Straight Path.\nThe path of those who have received Your grace; not the path of those who have brought down wrath upon themselves, nor of those who have gone astray.',
-    instruction: 'Recite the opening chapter of the Quran, Al-Fatiha. This is required in every round of the prayer. Say "Ameen" at the end.',
+    instruction: 'While standing, recite the opening chapter, then say '
+        '"Ameen" at the end:',
     icon: '📖',
     level: StepLevel.learning,
     info:
@@ -105,7 +107,8 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'قُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ',
     transliteration: 'Qul Huwa Allahu Ahad\nAllahus-Samad\nLam yalid wa lam yoolad\nWa lam yakun lahu kufuwan ahad',
     translation: 'Say: He is Allah, the One.\nAllah, the Eternal Refuge.\nHe neither begets nor is born.\nNor is there to Him any equivalent.',
-    instruction: 'After the Opening, recite any short chapter of the Quran. Here is Al-Ikhlas (112) as an example. This is recited in the first two rounds.',
+    instruction: 'Then recite any short chapter of the Quran. This one is '
+        'Al-Ikhlas, an example to start with:',
     icon: '📖',
     level: StepLevel.sunnah,
     info:
@@ -120,7 +123,7 @@ final List<PrayerStep> _oneRakah = [
     transliteration: 'Subhan Allah',
     translation: 'Glory be to Allah',
     instruction: 'Say "Allahu Akbar" and bow, placing your hands on your '
-        'knees with your back straight. Say "Subhan Allah" 3 times.',
+        'knees with your back straight. While bowing, say 3 times:',
     icon: 'posture:bowing',
     info:
         'Bowing is for glorifying Allah rather than asking. The Prophet '
@@ -133,7 +136,7 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'اللَّهُ أَكْبَرُ',
     transliteration: 'Allahu Akbar',
     translation: 'Allah is the Greatest',
-    instruction: 'Say "Allahu Akbar" and stand back up.',
+    instruction: 'Stand back up, saying the line:',
     icon: 'posture:standing',
     info:
         'Standing upright again is its own posture, not a rushed transition. '
@@ -149,8 +152,8 @@ final List<PrayerStep> _oneRakah = [
     transliteration: 'Subhan Allah',
     translation: 'Glory be to Allah',
     instruction: 'Say "Allahu Akbar" and prostrate, with your forehead, '
-        'nose, both palms, both knees and toes touching the ground. Say '
-        '"Subhan Allah" 3 times.',
+        'nose, both palms, both knees and toes touching the ground. '
+        'While down, say 3 times:',
     icon: 'posture:prostrating',
     info:
         'This is the best place and time to make dua. The Prophet said '
@@ -178,8 +181,8 @@ final List<PrayerStep> _oneRakah = [
     arabicText: 'سُبْحَانَ اللَّهِ',
     transliteration: 'Subhan Allah',
     translation: 'Glory be to Allah',
-    instruction: 'Say "Allahu Akbar" and prostrate again. Say "Subhan '
-        'Allah" 3 times. This completes one round.',
+    instruction: 'Say "Allahu Akbar" and prostrate again. While down, say '
+        '3 times:',
     icon: 'posture:prostrating',
     info:
         'Another opportunity for dua, and the same nearness applies. '
@@ -210,7 +213,7 @@ final List<PrayerStep> _tashahhud = [
     transliteration: 'Allahu Akbar',
     translation: 'Allah is the Greatest',
     instruction: 'Sit with your left foot under you and your right foot '
-        'upright. Say "Allahu Akbar" 10 times.',
+        'upright. Say this line 10 times:',
     icon: 'posture:sitting',
     level: StepLevel.beginner,
     info:
@@ -223,7 +226,8 @@ final List<PrayerStep> _tashahhud = [
     arabicText: 'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ\nالسَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ\nالسَّلَامُ عَلَيْنَا وَعَلَىٰ عِبَادِ اللَّهِ الصَّالِحِينَ\nأَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ',
     transliteration: 'At-tahiyyatu lillahi was-salawatu wat-tayyibat\nAs-salamu \'alaika ayyuhan-Nabiyyu wa rahmatullahi wa barakatuh\nAs-salamu \'alaina wa \'ala \'ibadillahis-saliheen\nAsh-hadu an la ilaha illallah wa ash-hadu anna Muhammadan \'abduhu wa rasuluh',
     translation: 'All greetings, prayers, and good things are for Allah.\nPeace be upon you, O Prophet, and the mercy of Allah and His blessings.\nPeace be upon us and upon the righteous servants of Allah.\nI bear witness that there is no god but Allah, and I bear witness that Muhammad is His servant and messenger.',
-    instruction: 'Sit with your left foot under you and your right foot upright. Point your right index finger and recite the words below. Stay for about as long as it takes to say "Allahu Akbar" ten times, so the sitting is not rushed.',
+    instruction: 'Sit with your left foot under you and your right foot '
+        'upright. Point your right index finger and recite:',
     icon: 'posture:sitting',
     level: StepLevel.learning,
     info:
@@ -242,9 +246,8 @@ final List<PrayerStep> _closing = [
     arabicText: 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ',
     transliteration: 'Assalamu alaikum wa rahmatullah',
     translation: 'Peace and mercy of Allah be upon you',
-    instruction: 'Turn your head to the right and say "Assalamu alaikum". '
-        'Then turn your head to the left and say it again. This ends the '
-        'prayer.',
+    instruction: 'Turn your head to the right and say the line, then turn '
+        'to the left and say it again. This ends the prayer.',
     icon: '🕊️',
     info:
         'Turning to each side closes the prayer and greets those praying '

@@ -49,6 +49,22 @@ if grep -rq "main\.dart\.js" flutter_bootstrap.js flutter_service_worker.js inde
   exit 1
 fi
 
+# Cloudflare rewrites the origin's Cache-Control on this file to a four hour
+# browser TTL, so a returning visitor keeps loading the previous bundle even
+# though index.html is uncached and the bundle name changed. Fingerprinting
+# the bootstrap too means the URL itself is new, which no cache can serve
+# from an old entry.
+BOOT_HASH="$(md5sum flutter_bootstrap.js | cut -c1-10)"
+BOOT="flutter_bootstrap.$BOOT_HASH.js"
+mv flutter_bootstrap.js "$BOOT"
+sed -i "s|flutter_bootstrap\.js|$BOOT|g" index.html
+echo "==> fingerprinting bootstrap -> $BOOT"
+
+if ! grep -q "$BOOT" index.html; then
+  echo "✗ index.html does not reference $BOOT; refusing to deploy" >&2
+  exit 1
+fi
+
 echo "==> uploading to $REMOTE:$REMOTE_DIR"
 rsync -az --delete ./ "$REMOTE:$REMOTE_DIR/"
 
@@ -68,4 +84,10 @@ if [ "$served" != "$local_sum" ]; then
   exit 1
 fi
 
-echo "✓ deployed and verified: $URL/ is serving $NEW"
+served_index="$(curl -s --max-time 45 "$URL/")"
+if ! printf '%s' "$served_index" | grep -q "$BOOT"; then
+  echo "✗ the live page does not reference $BOOT" >&2
+  exit 1
+fi
+
+echo "✓ deployed and verified: $URL/ is serving $NEW via $BOOT"

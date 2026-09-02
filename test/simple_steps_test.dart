@@ -32,14 +32,21 @@ void main() {
       for (final step in stepsOf('Fajr')) {
         final base = step.title.replaceAll(RegExp(r' \(.*\)$'), '');
         if (!movements.contains(base)) continue;
-        expect(step.instruction, contains('Allahu Akbar'),
+        // Standing and rising ARE the takbir, so their card teaches it.
+        // Bowing and prostrating are entered with it and then have their
+        // own words, so the instruction names it there.
+        final entered = step.instruction.contains('Allahu Akbar') ||
+            step.transliteration.contains('Allahu Akbar');
+        expect(entered, isTrue,
             reason: '${step.title} should be entered with Allahu Akbar');
       }
     });
 
     test('the prayer closes with the greeting of peace, both sides', () {
       final last = stepsOf('Fajr').last;
-      expect(last.instruction, contains('Assalamu alaikum'));
+      // The card carries the salam; the instruction says which way to turn
+      // rather than repeating the words on screen directly above it.
+      expect(last.transliteration, contains('Assalamu alaikum'));
       expect(last.instruction.toLowerCase(), contains('right'));
       expect(last.instruction.toLowerCase(), contains('left'));
     });
@@ -50,7 +57,8 @@ void main() {
       final sitting = stepsOf('Fajr').firstWhere(
         (s) => s.title.contains('(Final)') || s.title.contains('(Middle)'),
       );
-      expect(sitting.instruction, contains('"Allahu Akbar" 10 times'));
+      expect(sitting.instruction, contains('10 times'));
+      expect(sitting.transliteration, contains('Allahu Akbar'));
     });
   });
 
