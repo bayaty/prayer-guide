@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../data/app_settings.dart';
@@ -245,164 +246,170 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Row(
-                          children: [
-                            Icon(Icons.system_update,
-                                color: AppColors.primary, size: 22),
-                            SizedBox(width: 8),
-                            Text(
-                              'App Updates',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-
-                        _row('Installed version',
-                            info?.currentVersion ?? '…'),
-                        const SizedBox(height: 8),
-                        _row(
-                          'Latest release',
-                          _checking
-                              ? 'checking…'
-                              : (info?.latestVersion ?? 'unknown'),
-                        ),
-
-                        if (info?.error != null) ...[
-                          const SizedBox(height: 14),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: AppColors.tintBg,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: AppColors.softPink),
-                            ),
-                            child: Text(
-                              info!.error!,
-                              style: TextStyle(
-                                  fontSize: 13, color: Colors.grey[800]),
-                            ),
-                          ),
-                        ],
-
-                        if (info != null &&
-                            info.error == null &&
-                            !info.updateAvailable &&
-                            !_checking) ...[
-                          const SizedBox(height: 14),
-                          Row(
+                // The web app updates when the page reloads, so there is
+                // nothing to check for and no APK to install. Offering the
+                // control there would only ever report a version the user
+                // cannot act on.
+                if (!kIsWeb) ...[
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
                             children: [
-                              Icon(Icons.check_circle,
-                                  color: Colors.green[600], size: 20),
-                              const SizedBox(width: 6),
+                              Icon(Icons.system_update,
+                                  color: AppColors.primary, size: 22),
+                              SizedBox(width: 8),
                               Text(
-                                'You are up to date',
+                                'App Updates',
                                 style: TextStyle(
-                                    fontSize: 14, color: Colors.grey[800]),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
                               ),
                             ],
                           ),
-                        ],
-
-                        if (info?.updateAvailable == true) ...[
-                          const SizedBox(height: 14),
-                          Text(
-                            'Version ${info!.latestVersion} is available.',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.accent,
-                            ),
-                          ),
-                          if ((info.releaseNotes ?? '').trim().isNotEmpty) ...[
-                            const SizedBox(height: 8),
-                            Text(
-                              info.releaseNotes!.trim(),
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  height: 1.45,
-                                  color: Colors.grey[700]),
-                            ),
-                          ],
-                        ],
-
-                        if (_downloading) ...[
                           const SizedBox(height: 16),
-                          LinearProgressIndicator(
-                            value: _progress > 0 ? _progress : null,
-                            backgroundColor: AppColors.softPink,
-                            color: AppColors.accent,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            _progress > 0
-                                ? 'Downloading… ${(_progress * 100).toStringAsFixed(0)}%'
-                                : 'Downloading…',
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey[600]),
-                          ),
-                        ],
 
-                        const SizedBox(height: 18),
-                        SizedBox(
-                          width: double.infinity,
-                          child: FilledButton.icon(
-                            style: FilledButton.styleFrom(
-                              backgroundColor: AppColors.accent,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                          _row('Installed version',
+                              info?.currentVersion ?? '…'),
+                          const SizedBox(height: 8),
+                          _row(
+                            'Latest release',
+                            _checking
+                                ? 'checking…'
+                                : (info?.latestVersion ?? 'unknown'),
+                          ),
+
+                          if (info?.error != null) ...[
+                            const SizedBox(height: 14),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: AppColors.tintBg,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: AppColors.softPink),
+                              ),
+                              child: Text(
+                                info!.error!,
+                                style: TextStyle(
+                                    fontSize: 13, color: Colors.grey[800]),
                               ),
                             ),
-                            onPressed: (_checking || _downloading)
-                                ? null
-                                : (info?.updateAvailable == true
-                                    ? _install
-                                    : _check),
-                            icon: Icon(
-                              info?.updateAvailable == true
-                                  ? Icons.download
-                                  : Icons.refresh,
-                              size: 20,
+                          ],
+
+                          if (info != null &&
+                              info.error == null &&
+                              !info.updateAvailable &&
+                              !_checking) ...[
+                            const SizedBox(height: 14),
+                            Row(
+                              children: [
+                                Icon(Icons.check_circle,
+                                    color: Colors.green[600], size: 20),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'You are up to date',
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey[800]),
+                                ),
+                              ],
                             ),
-                            label: Text(
-                              info?.updateAvailable == true
-                                  ? 'Update now'
-                                  : (_checking
-                                      ? 'Checking…'
-                                      : 'Check for updates'),
+                          ],
+
+                          if (info?.updateAvailable == true) ...[
+                            const SizedBox(height: 14),
+                            Text(
+                              'Version ${info!.latestVersion} is available.',
                               style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w600),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.accent,
+                              ),
+                            ),
+                            if ((info.releaseNotes ?? '').trim().isNotEmpty) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                info.releaseNotes!.trim(),
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    height: 1.45,
+                                    color: Colors.grey[700]),
+                              ),
+                            ],
+                          ],
+
+                          if (_downloading) ...[
+                            const SizedBox(height: 16),
+                            LinearProgressIndicator(
+                              value: _progress > 0 ? _progress : null,
+                              backgroundColor: AppColors.softPink,
+                              color: AppColors.accent,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              _progress > 0
+                                  ? 'Downloading… ${(_progress * 100).toStringAsFixed(0)}%'
+                                  : 'Downloading…',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey[600]),
+                            ),
+                          ],
+
+                          const SizedBox(height: 18),
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton.icon(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: AppColors.accent,
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: (_checking || _downloading)
+                                  ? null
+                                  : (info?.updateAvailable == true
+                                      ? _install
+                                      : _check),
+                              icon: Icon(
+                                info?.updateAvailable == true
+                                    ? Icons.download
+                                    : Icons.refresh,
+                                size: 20,
+                              ),
+                              label: Text(
+                                info?.updateAvailable == true
+                                    ? 'Update now'
+                                    : (_checking
+                                        ? 'Checking…'
+                                        : 'Check for updates'),
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Center(
-                  child: Text(
-                    'Updates are downloaded from GitHub Releases.\n'
-                    'Android will ask permission to install.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Text(
+                      'Updates are downloaded from GitHub Releases.\n'
+                      'Android will ask permission to install.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
                   ),
-                ),
+                ],
               ]),
             ),
           ),

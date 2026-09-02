@@ -28,6 +28,30 @@ void main() {
   Rect rectOf(WidgetTester tester, String text) =>
       tester.getRect(find.text(text).first);
 
+  group('the header still shows its name', () {
+    for (final size in const [
+      Size(1280, 700),
+      Size(390, 850),
+      Size(1024, 600),
+    ]) {
+      testWidgets('Wudu is visible at ${size.width.toInt()}x'
+          '${size.height.toInt()}', (tester) async {
+        await pump(tester, size);
+
+        // Not overlapping is not enough: a hidden title also never overlaps,
+        // which is exactly how the title went missing from the open header.
+        expect(find.text('Wudu'), findsWidgets,
+            reason: 'the header must still name the screen at $size');
+
+        final rect = tester.getRect(find.text('Wudu').first);
+        expect(rect.width, greaterThan(0), reason: 'title has no width');
+        expect(rect.height, greaterThan(0), reason: 'title has no height');
+        expect(rect.top, lessThan(size.height),
+            reason: 'title is off screen at $size');
+      });
+    }
+  });
+
   group('the header title never covers the subtitle', () {
     for (final size in const [
       Size(1280, 700), // the desktop browser window that showed the bug

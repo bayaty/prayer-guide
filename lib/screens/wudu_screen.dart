@@ -67,8 +67,17 @@ class WuduScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('🫧', style: TextStyle(fontSize: 50)),
-                      SizedBox(height: 4),
+                      Text('🫧', style: TextStyle(fontSize: 44)),
+                      SizedBox(height: 6),
+                      Text(
+                        'Wudu',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 2),
                       Text(
                         'Purify Yourself Before Prayer',
                         style: TextStyle(color: Colors.white70, fontSize: 14),
