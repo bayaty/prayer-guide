@@ -99,7 +99,7 @@ final List<WuduStep> wuduSteps = [
   ),
   const WuduStep(
     number: 8,
-    title: 'Wipe the Head',
+    title: 'Wipe the Head (at least one quarter of the head)',
     instruction: '',
     icon: '🌙',
     times: 1,

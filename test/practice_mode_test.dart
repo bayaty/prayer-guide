@@ -35,7 +35,7 @@ void main() {
     final titles = minimal.map((s) => s.title).toList();
     expect(titles, contains('Wash the Face'));
     expect(titles, contains('Wash the Arms (include elbows)'));
-    expect(titles, contains('Wipe the Head'));
+    expect(titles, contains('Wipe the Head (at least one quarter of the head)'));
     expect(titles, contains('Wash the Feet (include ankles)'));
 
     // The intention is sunnah in the Hanafi school, so bare minimum drops

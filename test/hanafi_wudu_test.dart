@@ -21,7 +21,7 @@ void main() {
     test('is the four acts the Quran names, in order', () {
       expect(
         bareMinimum().map((s) => s.title).toList(),
-        ['Wash the Face', 'Wash the Arms (include elbows)', 'Wipe the Head', 'Wash the Feet (include ankles)'],
+        ['Wash the Face', 'Wash the Arms (include elbows)', 'Wipe the Head (at least one quarter of the head)', 'Wash the Feet (include ankles)'],
       );
     });
 
@@ -32,9 +32,9 @@ void main() {
     });
 
     test('the head is wiped once, everything else washed three times', () {
-      final head = wuduSteps.firstWhere((s) => s.title == 'Wipe the Head');
+      final head = wuduSteps.firstWhere((s) => s.title == 'Wipe the Head (at least one quarter of the head)');
       expect(head.timesFor(extraSunnahs: true), 1);
-      for (final s in bareMinimum().where((s) => s.title != 'Wipe the Head')) {
+      for (final s in bareMinimum().where((s) => s.title != 'Wipe the Head (at least one quarter of the head)')) {
         expect(s.timesFor(extraSunnahs: true), 3, reason: s.title);
       }
     });
@@ -76,7 +76,8 @@ void main() {
       // "Wipe the Head (Masah)" is the shape being removed. A plain English
       // clarifier like "(include elbows)" is the opposite: it tells a
       // beginner exactly how far to wash.
-      final allowed = RegExp(r'\((include elbows|include ankles)\)');
+      final allowed = RegExp(
+          r'\((include elbows|include ankles|at least one quarter of the head)\)');
       for (final step in wuduSteps) {
         final stripped = step.title.replaceAll(allowed, '');
         expect(stripped, isNot(contains('(')), reason: step.title);
