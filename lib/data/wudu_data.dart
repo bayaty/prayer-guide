@@ -9,6 +9,18 @@ class WuduStep {
   final String instruction;
   final String icon;
 
+  /// Title used in bare-minimum mode when it differs from [title].
+  ///
+  /// Wiping the head is obligatory in every mode, so it stays a single
+  /// essential step: only the wording changes. Bare minimum states the
+  /// Hanafi minimum (a quarter of the head); Complete Steps teaches the
+  /// fuller practice and drops the qualifier.
+  final String bareMinimumTitle;
+
+  /// The title to show for [extraSunnahs] mode.
+  String titleFor({required bool extraSunnahs}) =>
+      (!extraSunnahs && bareMinimumTitle.isNotEmpty) ? bareMinimumTitle : title;
+
   /// How many times the action is performed (0 = not a counted action,
   /// e.g. intention or the closing supplication).
   final int times;
@@ -24,6 +36,7 @@ class WuduStep {
     required this.title,
     required this.instruction,
     required this.icon,
+    this.bareMinimumTitle = '',
     this.arabicText = '',
     this.transliteration = '',
     this.translation = '',
@@ -99,7 +112,11 @@ final List<WuduStep> wuduSteps = [
   ),
   const WuduStep(
     number: 8,
-    title: 'Wipe the Head (at least one quarter of the head)',
+    title: 'Wipe the Head',
+    // The quarter is the Hanafi MINIMUM, so it is shown only in the
+    // bare-minimum mode. Complete Steps teaches the fuller practice and
+    // should not carry the minimum as its heading.
+    bareMinimumTitle: 'Wipe the Head (at least one quarter of the head)',
     instruction: '',
     icon: '🌙',
     times: 1,

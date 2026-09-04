@@ -30,7 +30,7 @@ void main() {
 
     test('steps already done once stay at once', () {
       final head =
-          wuduSteps.firstWhere((s) => s.title == 'Wipe the Head (at least one quarter of the head)');
+          wuduSteps.firstWhere((s) => s.title == 'Wipe the Head');
       expect(head.times, 1);
       expect(head.timesFor(extraSunnahs: false), 1);
     });

@@ -21,7 +21,7 @@ void main() {
     test('is the four acts the Quran names, in order', () {
       expect(
         bareMinimum().map((s) => s.title).toList(),
-        ['Wash the Face', 'Wash the Arms (include elbows)', 'Wipe the Head (at least one quarter of the head)', 'Wash the Feet (include ankles)'],
+        ['Wash the Face', 'Wash the Arms (include elbows)', 'Wipe the Head', 'Wash the Feet (include ankles)'],
       );
     });
 
@@ -32,9 +32,9 @@ void main() {
     });
 
     test('the head is wiped once, everything else washed three times', () {
-      final head = wuduSteps.firstWhere((s) => s.title == 'Wipe the Head (at least one quarter of the head)');
+      final head = wuduSteps.firstWhere((s) => s.title == 'Wipe the Head');
       expect(head.timesFor(extraSunnahs: true), 1);
-      for (final s in bareMinimum().where((s) => s.title != 'Wipe the Head (at least one quarter of the head)')) {
+      for (final s in bareMinimum().where((s) => s.title != 'Wipe the Head')) {
         expect(s.timesFor(extraSunnahs: true), 3, reason: s.title);
       }
     });

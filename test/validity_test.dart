@@ -45,7 +45,7 @@ void main() {
           reason: 'washing the face is obligatory (Quran 5:6)');
       expect(titles, contains('Wash the Arms (include elbows)'),
           reason: 'washing the arms to the elbows is obligatory (Quran 5:6)');
-      expect(titles, contains('Wipe the Head (at least one quarter of the head)'),
+      expect(titles, contains('Wipe the Head'),
           reason: 'wiping the head is obligatory (Quran 5:6)');
       expect(titles, contains('Wash the Feet (include ankles)'),
           reason: 'washing the feet to the ankles is obligatory (Quran 5:6)');
@@ -64,7 +64,7 @@ void main() {
       final order = [
         titles.indexWhere((t) => t == 'Wash the Face'),
         titles.indexWhere((t) => t == 'Wash the Arms (include elbows)'),
-        titles.indexWhere((t) => t == 'Wipe the Head (at least one quarter of the head)'),
+        titles.indexWhere((t) => t == 'Wipe the Head'),
         titles.indexWhere((t) => t == 'Wash the Feet (include ankles)'),
       ];
       expect(order, orderedEquals([...order]..sort()),
@@ -86,7 +86,7 @@ void main() {
       const obligatory = [
         'Wash the Face',
         'Wash the Arms (include elbows)',
-        'Wipe the Head (at least one quarter of the head)',
+        'Wipe the Head',
         'Wash the Feet (include ankles)',
       ];
       for (final title in obligatory) {

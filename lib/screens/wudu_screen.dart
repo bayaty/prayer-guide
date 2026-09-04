@@ -169,7 +169,8 @@ class _WuduCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    step.title,
+                    step.titleFor(
+                        extraSunnahs: PracticeMode.instance.extraSunnahs),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
