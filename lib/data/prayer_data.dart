@@ -123,7 +123,7 @@ final List<PrayerStep> _oneRakah = [
     transliteration: 'Subhan Allah',
     translation: 'Glory be to Allah',
     instruction: 'Say "Allahu Akbar" and bow, placing your hands on your '
-        'knees with your back straight. While bowing, say 3 times:',
+        'knees with your back straight. While bowing, say:',
     icon: 'posture:bowing',
     info:
         'Bowing is for glorifying Allah rather than asking. The Prophet '
@@ -153,7 +153,7 @@ final List<PrayerStep> _oneRakah = [
     translation: 'Glory be to Allah',
     instruction: 'Say "Allahu Akbar" and prostrate, with your forehead, '
         'nose, both palms, both knees and toes touching the ground. '
-        'While down, say 3 times:',
+        'While down, say:',
     icon: 'posture:prostrating',
     info:
         'This is the best place and time to make dua. The Prophet said '
@@ -182,7 +182,7 @@ final List<PrayerStep> _oneRakah = [
     transliteration: 'Subhan Allah',
     translation: 'Glory be to Allah',
     instruction: 'Say "Allahu Akbar" and prostrate again. While down, say '
-        '3 times:',
+        'Say:',
     icon: 'posture:prostrating',
     info:
         'Another opportunity for dua, and the same nearness applies. '

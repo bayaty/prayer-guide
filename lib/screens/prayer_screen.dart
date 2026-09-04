@@ -200,7 +200,12 @@ class PrayerScreen extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: PracticeModeToggle(
                 visibleCount: visible.length,
-                totalCount: prayer.steps.length,
+                // Not prayer.steps.length: beginner steps are stand-ins that
+                // are swapped out for their learning versions, so the raw
+                // total counts both halves of a swap and can never be shown.
+                totalCount: prayer.steps
+                    .where((s) => s.level != StepLevel.beginner)
+                    .length,
               ),
             ),
           ),
