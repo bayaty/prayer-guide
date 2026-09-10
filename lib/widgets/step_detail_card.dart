@@ -104,27 +104,22 @@ class StepDetailCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                  // The recitation belongs to the step that introduces it, so
+                  // it stays inside the same card. Sections are assembled from
+                  // whichever the user has enabled and the step actually has,
+                  // so dividers only fall between two visible blocks and the
+                  // whole group disappears when nothing is left.
+                  if (sections.isNotEmpty) ...[
+                    const SizedBox(height: 20),
+                    const Divider(height: 1, color: AppColors.softPink),
+                    const SizedBox(height: 20),
+                    ...sections,
+                  ],
                 ],
               ),
             ),
           ),
         ),
-        // Sections are assembled from whichever the user has enabled and
-        // the step actually has, so dividers only fall between two visible
-        // blocks and the card disappears entirely when nothing is left.
-        if (sections.isNotEmpty) ...[
-          const SizedBox(height: 12),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(children: sections),
-            ),
-          ),
-        ],
         SizedBox(height: bottomPadding),
       ],
     );

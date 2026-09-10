@@ -128,13 +128,15 @@ void main() {
     testWidgets('three sections are separated by two dividers',
         (tester) async {
       await openStepWithText(tester);
-      expect(find.byType(Divider), findsNWidgets(2));
+      // +1 for the rule that separates the instruction from the recitation,
+      // which is part of the card rather than of the text sections.
+      expect(find.byType(Divider), findsNWidgets(2 + 1));
     });
 
     testWidgets('two sections leave a single divider', (tester) async {
       await AppSettings.instance.setShowArabic(false);
       await openStepWithText(tester);
-      expect(find.byType(Divider), findsOneWidget);
+      expect(find.byType(Divider), findsNWidgets(1 + 1));
     });
 
     testWidgets('one section leaves no divider', (tester) async {
@@ -142,7 +144,9 @@ void main() {
       await AppSettings.instance.setShowTransliteration(false);
       await openStepWithText(tester);
 
-      expect(find.byType(Divider), findsNothing,
+      // Only the card's instruction/recitation rule remains: a lone section
+      // must not add a divider of its own.
+      expect(find.byType(Divider), findsOneWidget,
           reason: 'a lone section should not be followed by a divider');
       expect(find.text('Translation'), findsOneWidget);
     });
