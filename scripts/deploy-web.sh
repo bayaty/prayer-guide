@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# Build the Flutter web app and deploy it to the Beelink.
+# Build the Flutter web app and deploy it to the web host.
+#
+# The site moved off the beelink to the Hetzner box, so REMOTE is an ssh
+# alias rather than a hardcoded host. Override with PRAYER_WEB_REMOTE.
 #
 # WHY THE CACHE BUSTING
 # The site sits behind Cloudflare. Its edge cached main.dart.js and kept
@@ -14,7 +17,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-REMOTE="${PRAYER_WEB_REMOTE:-beelink}"
+REMOTE="${PRAYER_WEB_REMOTE:-hetzner}"
 REMOTE_DIR="${PRAYER_WEB_DIR:-~/sites/prayerguide/app}"
 
 echo "==> building"

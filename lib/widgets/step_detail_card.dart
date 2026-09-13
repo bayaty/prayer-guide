@@ -81,7 +81,12 @@ class StepDetailCard extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  if (step.instruction.isNotEmpty) ...[
+                  // The instruction and the words it introduces are one unit:
+                  // "recite this:" is meaningless separated from the text it
+                  // points at, so both share a single bordered box rather than
+                  // the instruction sitting in a box of its own with the
+                  // recitation loose underneath.
+                  if (step.instruction.isNotEmpty || sections.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     Container(
                       width: double.infinity,
@@ -93,27 +98,33 @@ class StepDetailCard extends StatelessWidget {
                           color: AppColors.softPink,
                         ),
                       ),
-                      child: Text(
-                        step.instruction,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey[800],
-                          height: 1.5,
-                        ),
-                        textAlign: TextAlign.center,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (step.instruction.isNotEmpty)
+                            Text(
+                              step.instruction,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey[800],
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          // Sections are assembled from whichever blocks the
+                          // user has enabled and the step actually has, so the
+                          // divider only appears when an instruction and at
+                          // least one block are both visible.
+                          if (step.instruction.isNotEmpty &&
+                              sections.isNotEmpty) ...[
+                            const SizedBox(height: 20),
+                            const Divider(height: 1, color: AppColors.softPink),
+                            const SizedBox(height: 20),
+                          ],
+                          ...sections,
+                        ],
                       ),
                     ),
-                  ],
-                  // The recitation belongs to the step that introduces it, so
-                  // it stays inside the same card. Sections are assembled from
-                  // whichever the user has enabled and the step actually has,
-                  // so dividers only fall between two visible blocks and the
-                  // whole group disappears when nothing is left.
-                  if (sections.isNotEmpty) ...[
-                    const SizedBox(height: 20),
-                    const Divider(height: 1, color: AppColors.softPink),
-                    const SizedBox(height: 20),
-                    ...sections,
                   ],
                 ],
               ),
